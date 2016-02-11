@@ -38,7 +38,7 @@ the gene(s) related to the disease, or the genes you are interested.
 }
 }
 \details{
-\emph{extract_omim extracts} the genes from OMIM first, and then translate to 
+\emph{extract_omim} extracts the genes from OMIM first, and then translate to 
 appoved gene symbol by HGNC. Then the variants are captured for each gene 
 from OMIM API. However, you should apply for an account and an API key from OMIM.
 

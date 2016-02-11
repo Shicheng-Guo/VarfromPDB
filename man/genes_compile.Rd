@@ -28,28 +28,28 @@ the object from \emph{extract.clinvar} function.
 the object from \emph{extract.uniprot} function.
 }
   \item{localPDB}{
-the path of localized public data bases.
+the path of localized public databases.
 }
 }
 \details{
-The relation between genes and a phenotype in different databases can be 
+The relationships between genes and a phenotype in different databases can be 
 intergrated automatically. 
 }
 \value{
 A matrix containing the following information
-   \item{GeneSymbol }{gene symbol in HGNC.}
-   \item{chr }{chorosome of a gene.}
-   \item{strand }{strand of a gene.}
-   \item{start }{start position (hg19) of gene.}
-   \item{end }{end position (hg19) of a gene.}
+   \item{GeneSymbol }{gene symbols from HGNC.}
+   \item{chr }{chorosomes of the genes.}
+   \item{strand }{strands of the genes.}
+   \item{start }{start positions (hg19) of the genes.}
+   \item{end }{end positions (hg19) of the genes.}
    \item{EntrezGeneID }{Entrez GeneID}
-   \item{ApprovedName }{Approved gene name in HGNC.}
+   \item{ApprovedName }{Approved gene name from HGNC.}
    \item{Synonyms }{gene Synonyms.}
-   \item{HPO }{the phenotype in HPO.}
-   \item{Orphanet }{the phenotype in orphanet.}
-   \item{OMIM }{the phenotype in OMIM.}
-   \item{ClinVar }{the phenotype in ClinVar.}
-   \item{Uniprot }{the phenotype in Uniprot.}
+   \item{HPO }{the phenotypes from HPO.}
+   \item{Orphanet }{the phenotypes from orphanet.}
+   \item{OMIM }{the phenotypes from OMIM.}
+   \item{ClinVar }{the phenotypes from ClinVar.}
+   \item{Uniprot }{the phenotypes from Uniprot.}
 }
 \author{
 Zongfu Cao
