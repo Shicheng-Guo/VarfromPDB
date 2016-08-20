@@ -1,8 +1,7 @@
 genes_add_pubmed <-
-function(genepdb,pubmed,localPDB = paste(getwd(),"localPDB",sep="/")){
+function(genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/")){
 ## filter the pubmed
    pubmed <- pubmed[!is.na(pubmed[,1])&(pubmed[,2]!=""),]
-
    pubmed_genes <- unlist(lapply(as.character(pubmed[,"Approved.Symbol"]),function(x) unlist(strsplit(x,", "))))
    pdb_genes <- as.character(genepdb[!is.na(genepdb[,"chr"]),"Gene.symbol"])
 
@@ -15,8 +14,8 @@ function(genepdb,pubmed,localPDB = paste(getwd(),"localPDB",sep="/")){
         return(x)    
     }
     
-    hgnc <- read.delim(gzfile(paste(localPDB,"hgnc_complete_set.txt.gz",sep="/")))
-    refFlat <- read.delim(gzfile(paste(localPDB,"refFlat.txt.gz",sep="/")),header= FALSE)    
+    hgnc <- read.delim(gzfile(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")))
+    refFlat <- read.delim(gzfile(paste(localPDB.path,"refFlat.txt.gz",sep="/")),header= FALSE)    
     genes <- unique(c(as.character(pdb_genes), as.character(pubmed_genes)))
     genes <- genes[genes != ""]
     genes <- genes[-grep("missing",genes)]

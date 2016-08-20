@@ -11,7 +11,7 @@ Furtherly, the variants on a use-defined gene list can be captured meanwhile.
 }
 \usage{
 extract_omim(keyword, omim.apiKey,  
-             localPDB = paste(getwd(),"localPDB",sep="/"), 
+             localPDB.path = paste(getwd(),"localPDB",sep="/"), 
              type = "both", HPO.disease = NULL, genelist = NULL)
 }
 \arguments{
@@ -21,7 +21,7 @@ character string: keyword, to search the disease, clinical feature, or phenotype
   \item{omim.apiKey}{
 the API key of OMIM.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public data bases. The default value is set in the 
 working directory.
 }

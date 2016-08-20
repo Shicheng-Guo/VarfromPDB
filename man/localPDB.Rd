@@ -9,11 +9,11 @@ ClinVar and Uniprot.
 HPO, MedGen, GeneReview, HGNC, Orphanet, ClinVar and Uniprot.
 }
 \usage{
-localPDB(localPDB = paste(getwd(), "localPDB", sep = "/"), PDB = "all", 
+localPDB(localPDB.path = paste(getwd(), "localPDB", sep = "/"), PDB = "all", 
          omim.url = NULL)
 }
 \arguments{
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path to localize the public databases.
 }
   \item{PDB}{

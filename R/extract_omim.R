@@ -1,9 +1,9 @@
 extract_omim <-
 function(keyword, omim.apiKey,
-         localPDB = paste(getwd(),"localPDB",sep="/"), type = "both", HPO.disease = NULL, genelist = NULL){
-    if(file.exists(localPDB)){
-         if(file.exists(paste(localPDB,"hgnc_complete_set.txt.gz",sep="/"))){
-             hgnc <- paste(localPDB,"hgnc_complete_set.txt.gz",sep="/")
+         localPDB.path = paste(getwd(),"localPDB",sep="/"), type = "both", HPO.disease = NULL, genelist = NULL){
+    if(file.exists(localPDB.path)){
+         if(file.exists(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/"))){
+             hgnc <- paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")
              }else{
                  hgnc <- NULL
          }        
@@ -11,8 +11,9 @@ function(keyword, omim.apiKey,
              hgnc <- NULL
     }     
        
-       morbidmap = paste(localPDB,"morbidmap",sep="/")
-       morbidmap <- read.table(morbidmap,header= FALSE,sep="|",quote = "")           
+       morbidmap = paste(localPDB.path,"morbidmap.txt",sep="/")
+#       morbidmap <- read.table(morbidmap,header= FALSE,sep="|",quote = "")           
+       morbidmap <- read.delim(morbidmap,comment.char = "#")           
        colnames(morbidmap) <- c("disease","gene","gene.mim.no","location")
     #check hgnc database
     if(is.null(hgnc)){

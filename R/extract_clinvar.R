@@ -1,28 +1,28 @@
 extract_clinvar <-
-function(keyword, localPDB=paste(getwd(), "localPDB",sep="/"), type="both",
+function(keyword, localPDB.path=paste(getwd(), "localPDB",sep="/"), type="both",
         HPO.disease=NULL, genelist=NULL){
-    morbidmap=paste(localPDB,"morbidmap",sep="/")
-    if(file.exists(localPDB)){
-         if(file.exists(paste(localPDB,"variant_summary.txt.gz",sep="/"))){
-             clinvar <- paste(localPDB,"variant_summary.txt.gz",sep="/")
+    morbidmap=paste(localPDB.path,"morbidmap.txt",sep="/")
+    if(file.exists(localPDB.path)){
+         if(file.exists(paste(localPDB.path,"variant_summary.txt.gz",sep="/"))){
+             clinvar <- paste(localPDB.path,"variant_summary.txt.gz",sep="/")
              }else{
                  clinvar <- NULL
          }        
 
-         if(file.exists(paste(localPDB,"gene_condition_source_id",sep="/"))){
-             gene2dis <- paste(localPDB,"gene_condition_source_id",sep="/")
+         if(file.exists(paste(localPDB.path,"gene_condition_source_id",sep="/"))){
+             gene2dis <- paste(localPDB.path,"gene_condition_source_id",sep="/")
              }else{
                  gene2dis <- NULL
          }        
 
-         if(file.exists(paste(localPDB,"NAMES.csv.gz",sep="/"))){
-             medgene.names <- paste(localPDB,"NAMES.csv.gz",sep="/")
+         if(file.exists(paste(localPDB.path,"NAMES.csv.gz",sep="/"))){
+             medgene.names <- paste(localPDB.path,"NAMES.csv.gz",sep="/")
              }else{
                  medgene.names <- NULL
          }        
 
-         if(file.exists(paste(localPDB,"GRtitle_shortname_NBKid.txt",sep="/"))){
-             genereview <- paste(localPDB,"GRtitle_shortname_NBKid.txt",sep="/")
+         if(file.exists(paste(localPDB.path,"GRtitle_shortname_NBKid.txt",sep="/"))){
+             genereview <- paste(localPDB.path,"GRtitle_shortname_NBKid.txt",sep="/")
              }else{
                  genereview <- NULL
          }        
@@ -78,9 +78,9 @@ function(keyword, localPDB=paste(getwd(), "localPDB",sep="/"), type="both",
     }
 
     if(substr(medgene.names,nchar(medgene.names)-1,nchar(medgene.names)) == "gz"){
-        medgene.names <- read.delim(gzfile(medgene.names))
+        medgene.names <- read.csv(gzfile(medgene.names))
         }else{
-            medgene.names <- read.delim(medgene.names)
+            medgene.names <- read.csv(medgene.names)
     }       
 
    ## HPO
@@ -166,7 +166,8 @@ function(keyword, localPDB=paste(getwd(), "localPDB",sep="/"), type="both",
      mim.id.pheno <- unique(gene2dis.extr[gene2dis.extr[,"pheno.check"] == "yes",7])
      mim.id.pheno <- mim.id.pheno[!is.na(mim.id.pheno)]
      
-      morbidmap <- read.table(morbidmap,header= FALSE,sep="|",quote = "")           
+#      morbidmap <- read.table(morbidmap,header= FALSE,sep="|",quote = "")           
+       morbidmap <- read.delim(morbidmap,comment.char = "#")           
       colnames(morbidmap) <- c("disease","gene","gene.mim.no","location")
      
      ##extract the variants in the genes

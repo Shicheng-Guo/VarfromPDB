@@ -1,10 +1,10 @@
 variants_compile <-
-function(omim,clinvar,uniprot,localPDB = paste(getwd(),"localPDB",sep="/")){
-    clinvarDB <- read.delim(gzfile(paste(localPDB,"variant_summary.txt.gz",sep="/"))) 
+function(omim,clinvar,uniprot,localPDB.path = paste(getwd(),"localPDB",sep="/")){
+    clinvarDB <- read.delim(gzfile(paste(localPDB.path,"variant_summary.txt.gz",sep="/"))) 
     var.omim <- setdiff(omim[,"clinvarAccessions"],clinvar$RCVaccession) 
     omim.add <- clinvar.add <- uniprot.add <- c()   
     
-# compile omim variants to clinvar 
+# compile omim variants into clinvar 
     omim.rcvacces <- unlist(lapply(omim[,"clinvarAccessions"],function(x) unique(unlist(strsplit(x,";")))))
     clinvar.rcvacces <- unlist(lapply(clinvar[,"RCVaccession"],function(x) unique(unlist(strsplit(as.character(x),";")))))
     var.omim <- setdiff(omim.rcvacces,clinvar.rcvacces)
@@ -21,7 +21,7 @@ function(omim,clinvar,uniprot,localPDB = paste(getwd(),"localPDB",sep="/")){
             omim.add <- omim.add[omim.add["status"] == "live"]
     }     
       
-# compile uniprot variants to clinvar
+# compile uniprot variants into clinvar
     var.uniprot <- paste(uniprot[,1],unlist(lapply(uniprot[,4],str_trim)),sep=":")
     var.clinvar <- paste(clinvar[,"GeneSymbol"], unlist(lapply(as.character(clinvar[,"HGVS.p.."]), function(x) unlist(strsplit(x,":"))[2])),sep=":")
     var.uniprot.1 <- setdiff(var.uniprot,var.clinvar)

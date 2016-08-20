@@ -10,14 +10,14 @@ The alias of a disease/phenotye are caputured from HPO database. Furtherly,
 the gene mutations on a gene list can also be captured at the same time.
 }
 \usage{
-extract_uniprot(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), 
+extract_uniprot(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), 
                 HPO.disease = NULL, genelist = NULL)
 }
 \arguments{
   \item{keyword}{
 character string: keyword, to search the disease, clinical feature, or phenotype.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public data bases. The default value is set in the 
 working directory.
 }

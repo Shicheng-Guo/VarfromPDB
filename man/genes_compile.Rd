@@ -9,7 +9,7 @@ multiple databases, including HPO, orphanet, omim, clinvar and uniprot.
 }
 \usage{
 genes_compile(HPO, orphanet, omim, clinvar, uniprot,
-       localPDB = paste(getwd(),"localPDB",sep="/"))
+       localPDB.path = paste(getwd(),"localPDB",sep="/"))
 }
 \arguments{
   \item{HPO}{
@@ -27,7 +27,7 @@ the object from \emph{extract.clinvar} function.
   \item{uniprot}{
 the object from \emph{extract.uniprot} function.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public databases.
 }
 }

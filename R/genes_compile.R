@@ -1,5 +1,5 @@
 genes_compile <-
-function(HPO,orphanet,omim,clinvar,uniprot,localPDB = paste(getwd(),"localPDB",sep="/")){
+function(HPO,orphanet,omim,clinvar,uniprot,localPDB.path = paste(getwd(),"localPDB",sep="/")){
 
 # trim the gene names: 'ORF' -> 'orf'
     gene.orf <- function(x){
@@ -10,8 +10,8 @@ function(HPO,orphanet,omim,clinvar,uniprot,localPDB = paste(getwd(),"localPDB",s
         return(x)    
     }
     
-    hgnc <- read.delim(gzfile(paste(localPDB,"hgnc_complete_set.txt.gz",sep="/")))
-    refFlat <- read.delim(gzfile(paste(localPDB,"refFlat.txt.gz",sep="/")),header= FALSE)    
+    hgnc <- read.delim(gzfile(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")))
+    refFlat <- read.delim(gzfile(paste(localPDB.path,"refFlat.txt.gz",sep="/")),header= FALSE)    
     genes <- unique(c(as.character(HPO[,3]), as.character(orphanet[,3]), as.character(omim[,6]), as.character(clinvar[,2]), as.character(uniprot[,1])))
     genes <- genes[genes != "" & genes != "missing"]
     genes.trim <- unique(unlist(lapply(genes,gene.orf)))

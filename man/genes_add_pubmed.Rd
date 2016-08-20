@@ -9,7 +9,7 @@ PubMed abstracts into the gene set  from the public databases,
 including HPO, orphanet, omim, clinvar and uniprot.
 }
 \usage{
-genes_add_pubmed(genepdb, pubmed, localPDB = paste(getwd(), "localPDB", sep = "/"))
+genes_add_pubmed(genepdb, pubmed, localPDB.path = paste(getwd(), "localPDB", sep = "/"))
 }
 \arguments{
   \item{genepdb}{
@@ -18,7 +18,7 @@ the object from function \emph{genes_compiled}.
   \item{pubmed}{
 the object from function \emph{extract_pubmed}. The object need to be checked mannually.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public databases.
 }
 }

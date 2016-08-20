@@ -9,7 +9,7 @@ multiple database, including omim, clinvar and uniprot.
 }
 \usage{
 variants_compile(omim, clinvar, uniprot, 
-     localPDB = paste(getwd(), "localPDB", sep = "/"))
+     localPDB.path = paste(getwd(), "localPDB", sep = "/"))
 }
 \arguments{
   \item{omim}{
@@ -21,7 +21,7 @@ the object from \emph{extract.clinvar} function.
   \item{uniprot}{
 the object from \emph{extract.uniprot} function.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public data bases.
 }
 }

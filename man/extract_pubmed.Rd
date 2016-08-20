@@ -8,7 +8,7 @@ Extract the genes and variants related to a genetic disorder from PubMed
 disorder or a clinical feature from NCBI PubMed.
 }
 \usage{
-extract_pubmed(query, keyword, localPDB = paste(getwd(), "localPDB", sep = "/"))
+extract_pubmed(query, keyword, localPDB.path = paste(getwd(), "localPDB", sep = "/"))
 }
 \arguments{
   \item{query}{
@@ -19,7 +19,7 @@ searching strategy in PubMed, such as
 character string: keyword, to search the disease, clinical feature, 
 or phenotype.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public data bases. The default value is set in the 
 working directory.
 }

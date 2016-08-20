@@ -1,8 +1,8 @@
 extract_uniprot <-
-function(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), HPO.disease = NULL, genelist = NULL){
-    if(file.exists(localPDB)){
-         if(file.exists(paste(localPDB,"humsavar.txt",sep="/"))){
-             uniprot <- paste(localPDB,"humsavar.txt",sep="/")
+function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), HPO.disease = NULL, genelist = NULL){
+    if(file.exists(localPDB.path)){
+         if(file.exists(paste(localPDB.path,"humsavar.txt",sep="/"))){
+             uniprot <- paste(localPDB.path,"humsavar.txt",sep="/")
              }else{
                  uniprot <- NULL
          }        
@@ -17,7 +17,7 @@ function(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), HPO.disease = NU
        }
  
     if(is.null(uniprot)){
-       uniprot <- "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/variants/humsavar.txt"
+       uniprot <- "http://www.uniprot.org/docs/humsavar.txt"
        download.path <- paste(getwd(),"localPDB",sep="/")
        if(!file.exists(download.path))
           dir.create(download.path )
@@ -41,7 +41,7 @@ function(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), HPO.disease = NU
        if(!is.null(keyword)){
           dat.d <- dat[grep_split(keyword,dat[,"DiseaseName"]),]
           pheno.yes <- as.character(dat.d[,"DiseaseName"])
-          }else if((is.null(keyword)& !is.null(HPO.disease)) | (is.null(keyword) & !is.null(genelist))){
+          }else if((is.null(keyword) & !is.null(HPO.disease)) | (is.null(keyword) & !is.null(genelist))){
             dat.d <- c()
             pheno.yes <- c()  
             }else{

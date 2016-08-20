@@ -1,13 +1,13 @@
 pheno_extract_HPO <-
-function(keyword, localPDB = paste(getwd(),"localPDB",sep="/")){
-    if(file.exists(localPDB)){
-         if(file.exists(paste(localPDB,"phenotype_annotation.tab",sep="/"))){
-             HPO <- paste(localPDB,"phenotype_annotation.tab",sep="/")
+function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/")){
+    if(file.exists(localPDB.path)){
+         if(file.exists(paste(localPDB.path,"phenotype_annotation.tab",sep="/"))){
+             HPO <- paste(localPDB.path,"phenotype_annotation.tab",sep="/")
              }else{
                  HPO <- NULL
          }        
-         if( file.exists(paste(localPDB,"diseases_to_genes.txt",sep="/"))) {  
-             diseases_to_genes <- paste(localPDB,"diseases_to_genes.txt",sep="/")
+         if( file.exists(paste(localPDB.path,"diseases_to_genes.txt",sep="/"))) {  
+             diseases_to_genes <- paste(localPDB.path,"diseases_to_genes.txt",sep="/")
              }else{
                   diseases_to_genes <- NULL
          }         

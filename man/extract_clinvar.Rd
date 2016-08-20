@@ -12,14 +12,14 @@ Furtherly, the variants on a use-defined gene list can be captured
 at the same time.
 }
 \usage{
-extract_clinvar(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), type = "both",
+extract_clinvar(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), type = "both",
            HPO.disease = NULL, genelist = NULL)
 }
 \arguments{
   \item{keyword}{
 character string: keyword, to describe a disease, clinical feature, or phenotype.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public data bases. The default value is set in the 
 working directory.
 }

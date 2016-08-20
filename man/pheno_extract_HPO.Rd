@@ -11,14 +11,14 @@ a disease here can be considered in other databases,
 including Ophanet, OMIM, ClinVar and Uniprot. 
 }
 \usage{
-pheno_extract_HPO(keyword, localPDB = paste(getwd(),"localPDB",sep="/"))
+pheno_extract_HPO(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"))
 }
 \arguments{
   \item{keyword}{
 character string: keyword, to search a disease, a clinical feature, 
 or a phenotype.
 }
-  \item{localPDB}{
+  \item{localPDB.path}{
 the path of localized public data bases. The default value is set in 
 the working directory.
 }

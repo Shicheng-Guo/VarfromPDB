@@ -1,6 +1,6 @@
 localPDB <-
-function(localPDB = paste(getwd(),"localPDB",sep="/"),PDB="all", omim.url = NULL){
-    download.path = localPDB
+function(localPDB.path = paste(getwd(),"localPDB",sep="/"),PDB="all", omim.url = NULL){
+    download.path = localPDB.path
     if(!file.exists(download.path))
           dir.create(download.path )
     options(timeout = 1000)
@@ -15,9 +15,9 @@ function(localPDB = paste(getwd(),"localPDB",sep="/"),PDB="all", omim.url = NULL
    if(is.null(omim.url)){ 
       print("Warning: please make sure you have localized the OMIM file morbidmap! if NOT, you should apply for an OMIM account and get the URL from http://omim.org/downloads.")
       }else if(!is.null(omim.url)){
-        morbidmap <- paste(omim.url,"morbidmap", sep = "/")
-        if( !file.exists(paste(download.path,"morbidmap",sep="/")))
-           download.file(morbidmap,paste(download.path,"morbidmap",sep="/"),method="auto")   
+        morbidmap <- omim.url
+        if( !file.exists(paste(download.path,"morbidmap.txt",sep="/")))
+           download.file(morbidmap,paste(download.path,"morbidmap.txt",sep="/"),method="auto")   
    }
    
    if(HPO == "yes" | toupper(PDB) == "HPO"){
@@ -26,7 +26,7 @@ function(localPDB = paste(getwd(),"localPDB",sep="/"),PDB="all", omim.url = NULL
        if( !file.exists(paste(download.path,"phenotype_annotation.tab",sep="/")))
            download.file(HPO,paste(download.path,"phenotype_annotation.tab",sep="/"),method="auto")
        if( !file.exists(paste(download.path,"diseases_to_genes.txt",sep="/")))
-           download.file(diseases_to_genes,paste(download.path,"diseases_to_genes.txt",sep="/"),method="curl")     
+           download.file(diseases_to_genes,paste(download.path,"diseases_to_genes.txt",sep="/"),method="auto")     
    }
       
    if(Orphanet == "yes" | toupper(PDB) == "ORPHANET"){
@@ -63,10 +63,10 @@ function(localPDB = paste(getwd(),"localPDB",sep="/"),PDB="all", omim.url = NULL
    }
    
    if(Uniprot == "yes" | toupper(PDB) == "UNIPROT"){
-       uniprot <- "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/variants/humsavar.txt"
+       uniprot <- "http://www.uniprot.org/docs/humsavar.txt"
        if( !file.exists(paste(download.path,"humsavar.txt",sep="/")))
            download.file(uniprot,paste(download.path,"humsavar.txt",sep="/"),method="auto")
    }
    
-   print(paste("Congratulations! Public databases have been localized the in ",localPDB,".",sep=""))
+   print(paste("Congratulations! Public databases have been localized the in ",localPDB.path,".",sep=""))
 }
