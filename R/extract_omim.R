@@ -96,8 +96,19 @@ function(keyword, omim.apiKey,
       variants <- c()
       for(j in genes){
           print(j)
-          urls <- paste("http://api.europe.omim.org/api/entry?mimNumber=",j,"&include=all&apiKey=",omim.apiKey,sep="")
-          doc <- xmlTreeParse(urls,useInternalNodes = TRUE)       
+          urls1 <- paste("http://api.omim.org/api/entry?mimNumber=",j,"&include=all&apiKey=",omim.apiKey,sep="")
+          urls2 <- paste("http://api.europe.omim.org/api/entry?mimNumber=",j,"&include=all&apiKey=",omim.apiKey,sep="")
+          urls3 <- paste("http://api.us-east.omim.org/api/entry?mimNumber=",j,"&include=all&apiKey=",omim.apiKey,sep="")
+          doc.try1 = try(doc <- xmlTreeParse(urls1,useInternalNodes = TRUE),silent =T)  
+          if(class(doc.try1)[1] == "try-error"){
+              doc.try2 = try(doc <- xmlTreeParse(urls2,useInternalNodes = TRUE),silent =T)  
+              if(class(doc.try2)[1] == "try-error"){
+                 doc.try3 = try(doc <- xmlTreeParse(urls3,useInternalNodes = TRUE),silent =T)
+                 if(class(doc.try3)[1] == "try-error"){
+                      print("Note: Can not connect the OMIM API!")
+                 }
+              }
+          }     
           nodes <- getNodeSet(doc, "//entry")
           lists <- nodesToList(nodes)
       

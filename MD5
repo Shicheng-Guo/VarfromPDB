@@ -1,8 +1,8 @@
-4fd8482d24edb011d3a70f11978ea210 *DESCRIPTION
+01253baaf2e753419d52b7620b62ddb1 *DESCRIPTION
 ec5bcf9c07edb557bac8a3315d03bf9f *NAMESPACE
-bd5b0fb42789c0d03e7c02727db993d6 *R/extract_clinvar.R
+2925ca710561f1e64ec73010958ab1b0 *R/extract_clinvar.R
 d85117ec3d24055d7de8d9f057650d8d *R/extract_genes_orphanet.R
-0a73fab38a9a0376c74401c1d5ce58c9 *R/extract_omim.R
+e3a0b32d73619d300f1d20779d6c1aac *R/extract_omim.R
 f51b0f2e47057eefe36e74f716c65d28 *R/extract_pubmed.R
 bfe4c5c87b0678611b97a242a390482d *R/extract_uniprot.R
 1ae8b719f0fd2abad56a7db501fac3ba *R/genes_add_pubmed.R
