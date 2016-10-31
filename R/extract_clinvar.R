@@ -65,23 +65,6 @@ function(keyword, localPDB.path=paste(getwd(), "localPDB",sep="/"), type="both",
     }
        gene2dis <- read.delim(gene2dis)
        
-    # check medgene 
-     if(is.null(medgene.names)){
-       medgene.names <- "ftp://ftp.ncbi.nlm.nih.gov/pub/medgen/csv/NAMES.csv.gz"
-       download.path <- paste(getwd(),"localPDB",sep="/")
-       if(!file.exists(download.path))
-          dir.create(download.path )
-       options(timeout = 300)
-       if( !file.exists(paste(download.path,"NAMES.csv.gz",sep="/")))
-           download.file(medgene.names,paste(download.path,"NAMES.csv.gz",sep="/"),method="auto")
-       medgene.names <- paste(download.path,"NAMES.csv.gz",sep="/")
-    }
-
-    if(substr(medgene.names,nchar(medgene.names)-1,nchar(medgene.names)) == "gz"){
-        medgene.names <- read.csv(gzfile(medgene.names))
-        }else{
-            medgene.names <- read.csv(medgene.names)
-    }       
 
    ## HPO
        if(is.null(HPO.disease)){
@@ -89,18 +72,6 @@ function(keyword, localPDB.path=paste(getwd(), "localPDB",sep="/"), type="both",
           HPO.disease <- as.character(unique(HPO.disease.check[grep("OMIM",HPO.disease.check[,1]),1]))
        }
 
-  ##check genereview----------------
-     if(is.null(genereview)){
-       genereview <- "ftp://ftp.ncbi.nlm.nih.gov/pub/GeneReviews/GRtitle_shortname_NBKid.txt"
-       download.path <- paste(getwd(),"localPDB",sep="/")
-       if(!file.exists(download.path))
-          dir.create(download.path )
-       options(timeout = 300)
-       if( !file.exists(paste(download.path,"GRtitle_shortname_NBKid.txt",sep="/")))
-           download.file(genereview,paste(download.path,"GRtitle_shortname_NBKid.txt",sep="/"),method="auto")
-       genereview <- paste(download.path,"GRtitle_shortname_NBKid.txt",sep="/")
-    }
-        genereview <- read.delim(genereview)
 
    ##function: extract the phenotypeID from the colnames of PhenotypeIDS in clinvar_summary file
    ##databaseID="MedGen","OMIM","GeneReviews",unavailable: "SNOMED CT","Orphanet",
@@ -133,7 +104,7 @@ function(keyword, localPDB.path=paste(getwd(), "localPDB",sep="/"), type="both",
 ##########################
 
  ##begin to search 
-       if(!is.null(keyword)){
+       if(!is.null(keyword)){      
           gene2dis.d <- gene2dis[grep_split(keyword,gene2dis[,"DiseaseName"]),]
           pheno.yes <- as.character(gene2dis.d[,"DiseaseName"])
           }else if((is.null(keyword)& !is.null(HPO.disease)) | (is.null(keyword) & !is.null(genelist))){
@@ -172,93 +143,11 @@ function(keyword, localPDB.path=paste(getwd(), "localPDB",sep="/"), type="both",
      
      ##extract the variants in the genes
      clinvar.extr <- clinvar[is.element(clinvar[,"GeneSymbol"],genes),]
-     ##check the phenotype based on the phenotype OMIM ID 
-     id.grep <- paste("OMIM",mim.id.pheno,sep=":")
-     ##extract mimID
-     clinvar.extr$omimID <-  unlist(lapply(clinvar.extr[,"PhenotypeIDS"],function(x) extract.PhenotypeID (x,database="OMIM")))
-     clinvar.extr$omim.phenotype <- clinvar.extr$omimID
-     phenoid.omim <- unique(clinvar.extr$omimID)
-     phenoid.omim <- setdiff(phenoid.omim,c("-",""))
-     for(i in phenoid.omim){
-         ##i="OMIM:613307"
-         if(length(unlist(strsplit(i,","))) == 1){
-            id.omim.i <- unlist(strsplit(i,":"))[2]
-            disease.i <- as.character(morbidmap[grep(id.omim.i,morbidmap[,1],ignore.case = TRUE),1])
-            if(length(disease.i)==0){disease.i=NA}
-            }else if(length(unlist(strsplit(i,","))) > 1){
-                ids.i <- unlist(strsplit(i,","))
-                disease.i <- c()
-                for(j in ids.i){
-                   ##j=ids.i[1]
-                   id.omim.j <- unlist(strsplit(j,":"))[2]
-                   disease.j <- as.character(morbidmap[grep(id.omim.j,morbidmap[,1],ignore.case = TRUE),1])
-                   disease.i <- c(disease.i,disease.j)
-                }
-                disease.i <- paste(disease.i,collapse=";")
-         }
-       if(length( disease.i) >1) {disease.i = paste(disease.i,collapse=";")}
-       clinvar.extr[clinvar.extr$omimID==i,"omim.phenotype"] = disease.i
-       rm(disease.i)
-     }
-
      
-     ##extract MedGenID    
-     clinvar.extr$medgenID <-  unlist(lapply(clinvar.extr[,"PhenotypeIDS"],function(x) extract.PhenotypeID (x,database="MedGen")))
-     clinvar.extr$medgen.phenotype <- clinvar.extr$medgenID
-     phenoid.medgen <- unique(clinvar.extr$medgenID)
-     phenoid.medgen <- setdiff(phenoid.medgen,c("-",""))
-     if(!is.null(phenoid.medgen)){
-         for(i in phenoid.medgen){
-             ##i="medgen:613307"
-             if(length(unlist(strsplit(i,","))) == 1){
-                id.medgen.i <- unlist(strsplit(i,":"))[2]
-                disease.i <- as.character(medgene.names[grep(id.medgen.i,medgene.names[,1],ignore.case = TRUE),2])
-                if(length(disease.i)==0){disease.i=NA}
-                }else if(length(unlist(strsplit(i,","))) > 1){
-                    ids.i <- unlist(strsplit(i,","))
-                    disease.i <- c()
-                    for(j in ids.i){
-                       ##j=ids.i[1]
-                       id.medgen.j <- unlist(strsplit(j,":"))[2]
-                       disease.j <- as.character(medgene.names[grep(id.medgen.j,medgene.names[,1],ignore.case = TRUE),2])
-                       disease.i <- c(disease.i,disease.j)
-                    }
-                    disease.i <- paste(disease.i,collapse=";")
-             }
-           if(length( disease.i) >1) {disease.i <- paste(disease.i,collapse=";")}
-           clinvar.extr[clinvar.extr$medgenID==i,"medgen.phenotype"] = disease.i
-           rm(disease.i)
-         }
-     }
-        
-     ##extract GeneReviews
-     clinvar.extr$GeneReviewsID <-  unlist(lapply(clinvar.extr[,"PhenotypeIDS"],function(x) extract.PhenotypeID (x,database="GeneReviews")))
-     clinvar.extr$GeneReviews.phenotype <- clinvar.extr$GeneReviewsID
-     phenoid.GeneReviews <- unique(clinvar.extr$GeneReviewsID)
-     phenoid.GeneReviews <- setdiff(phenoid.GeneReviews,"")
-     if(!is.null(phenoid.GeneReviews)){  
-       for(i in phenoid.GeneReviews){
-           ##i="GeneReviews:NBK1186"
-           if(length(unlist(strsplit(i,","))) == 1){
-              id.GeneReviews.i <- unlist(strsplit(i,":"))[2]
-              disease.i <- unique(as.character(genereview[grep(id.GeneReviews.i,genereview[,3],ignore.case = TRUE),2]))
-              if(length(disease.i)==0){disease.i <- NA}
-              }else if(length(unlist(strsplit(i,","))) > 1){
-                  ids.i <- unlist(strsplit(i,","))
-                  disease.i <- c()
-                  for(j in ids.i){
-                     ##j=ids.i[1]
-                     id.GeneReviews.j <- unlist(strsplit(j,":"))[2]
-                     disease.j <- unique(as.character(genereview[grep(id.GeneReviews.j,genereview[,3],ignore.case = TRUE),2]))
-                     disease.i <- c(disease.i,disease.j)
-                  }
-                  disease.i <- paste(disease.i,collapse=";")
-           }
-         if(length( disease.i) >1) {disease.i <- paste(disease.i,collapse=";")}
-         clinvar.extr[clinvar.extr$GeneReviewsID==i,"GeneReviews.phenotype"] = disease.i
-         rm(disease.i)
-       }
-     }
+## extract the variants from summary file directly
+      clinvar.d <- clinvar[grep_split(keyword,clinvar[,"PhenotypeList"]),]
+     
+     clinvar.extr <- unique(rbind(clinvar.extr,clinvar.d))
      extract <- list(gene2dis.extr,clinvar.extr)
      names(extract) <- c("gene2dis","variants")
      return(extract)

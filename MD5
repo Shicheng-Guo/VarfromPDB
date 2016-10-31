@@ -1,8 +1,8 @@
-01253baaf2e753419d52b7620b62ddb1 *DESCRIPTION
+092b01db3af0ea20a0efbd114b3518c8 *DESCRIPTION
 ec5bcf9c07edb557bac8a3315d03bf9f *NAMESPACE
-2925ca710561f1e64ec73010958ab1b0 *R/extract_clinvar.R
+5404ef91b614e5d96c67f5564e67b4f2 *R/extract_clinvar.R
 d85117ec3d24055d7de8d9f057650d8d *R/extract_genes_orphanet.R
-e3a0b32d73619d300f1d20779d6c1aac *R/extract_omim.R
+d7276820d29a482553ae47d32e62276e *R/extract_omim.R
 f51b0f2e47057eefe36e74f716c65d28 *R/extract_pubmed.R
 bfe4c5c87b0678611b97a242a390482d *R/extract_uniprot.R
 1ae8b719f0fd2abad56a7db501fac3ba *R/genes_add_pubmed.R
@@ -11,7 +11,7 @@ ff55320a8c4967159816567bb3563564 *R/genes_compile.R
 bfe91790b37339729e4213b8a5227685 *R/localPDB.R
 f6930c8418526c630c043d11211c6c55 *R/pheno_extract_HPO.R
 c39b6c2c87284bc1ebd5dcdcec3528ed *R/sysdata.rda
-e5b7c3534e63d135d9abfcdcece253a9 *R/variants_compile.R
+e5b6f5dbfb3e0ff4439cce77c11e092a *R/variants_compile.R
 9279c84f0907dd0268008617c5ade44e *data/aa.rda
 b07e2bbcf23dd99f13248404464ff580 *inst/doc/VarfromPDB.pdf
 275ea902874370c7163bb9e9ddd2d5d5 *man/aa.Rd

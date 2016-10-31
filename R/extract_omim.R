@@ -95,7 +95,7 @@ function(keyword, omim.apiKey,
    if(type != "gene"){
       variants <- c()
       for(j in genes){
-          print(j)
+        #  print(j)
           urls1 <- paste("http://api.omim.org/api/entry?mimNumber=",j,"&include=all&apiKey=",omim.apiKey,sep="")
           urls2 <- paste("http://api.europe.omim.org/api/entry?mimNumber=",j,"&include=all&apiKey=",omim.apiKey,sep="")
           urls3 <- paste("http://api.us-east.omim.org/api/entry?mimNumber=",j,"&include=all&apiKey=",omim.apiKey,sep="")
