@@ -35,7 +35,7 @@ summary variant set.
 A matrix containing all the variant-gene-phenotypes relationships.
 }
 \author{
-Zongfu Cao
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 
 \seealso{
@@ -45,7 +45,8 @@ Zongfu Cao
 }
 \examples{
 #variantsPDB <- variants_compile(omim = variants.omim, 
-#                                clinvar = variants.clinvar,uniprot = variants.uniprot)
+#                                clinvar = variants.clinvar,
+#                                uniprot = variants.uniprot)
 }
 \keyword{ variants }
 \keyword{ phenotype }

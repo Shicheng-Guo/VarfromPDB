@@ -59,7 +59,7 @@ Available on http://www.orpha.net. Accessed [date accessed].
 Available on http://www.orphadata.org. Data version [XML]
 }
 \author{
-Zongfu Cao (caozongfu@gmail.com)
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 
 \seealso{

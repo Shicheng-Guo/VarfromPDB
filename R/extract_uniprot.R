@@ -10,7 +10,7 @@ function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), HPO.disease
              uniprot <- NULL
     }     
 
-   # HPO
+## HPO,consider the disease alias
        if(is.null(HPO.disease)){
           HPO.disease.check <- pheno_extract_HPO(keyword= keyword)
           HPO.disease <- as.character(unique(HPO.disease.check[grep("OMIM",HPO.disease.check[,1]),1]))
@@ -19,11 +19,12 @@ function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), HPO.disease
     if(is.null(uniprot)){
        uniprot <- "http://www.uniprot.org/docs/humsavar.txt"
        download.path <- paste(getwd(),"localPDB",sep="/")
+       uniprot.local <- paste(download.path,"humsavar.txt",sep="/")
        if(!file.exists(download.path))
           dir.create(download.path )
        options(timeout = 300)
-       if( !file.exists(paste(download.path,"humsavar.txt",sep="/")))
-           download.file(uniprot,paste(download.path,"humsavar.txt",sep="/"),method="auto")
+       if( !file.exists(uniprot.local))
+           curl_download(uniprot,uniprot.local)
        uniprot <- paste(download.path,"humsavar.txt",sep="/")
     }
 

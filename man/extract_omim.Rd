@@ -61,7 +61,7 @@ genetic disorders. Nucleic Acids Res. 2015 Jan;43(Database issue):D789-98. doi:
 PMCID: PMC4383985.
 }
 \author{
-Zongfu Cao (caozongfu@gmail.com)
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 
 \seealso{
@@ -69,11 +69,6 @@ Zongfu Cao (caozongfu@gmail.com)
 \code{\link{extract_uniprot}},
 \code{\link{extract_genes_orphanet}},
 \code{\link{extract_clinvar}}
-}
-\examples{
-## extract genes and variants from OMIM
-#    omim.phenotype = extract_omim(keyword= "retinoblastoma",
-#                                omim.apiKey = "862D320C6D63C094582A65A54F44B09A0314FC23")
 }
 \keyword{OMIM}
 \keyword{ rare disease }

@@ -19,7 +19,7 @@ the object from \emph{pheno.extract.HPO} function.
 the object from \emph{extract.genes.orphanet} function.
 }
   \item{omim}{
-the object from \emph{extract.omim} function.
+the object from \emph{extract.omim} function.The default value is NULL.
 }
   \item{clinvar}{
 the object from \emph{extract.clinvar} function.
@@ -52,7 +52,7 @@ A matrix containing the following information
    \item{Uniprot }{the phenotypes from Uniprot.}
 }
 \author{
-Zongfu Cao
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 \seealso{
  \code{\link{pheno_extract_HPO}}, \code{\link{extract_omim}}, 

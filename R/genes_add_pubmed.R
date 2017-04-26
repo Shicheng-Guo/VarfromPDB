@@ -1,7 +1,9 @@
 genes_add_pubmed <-
-function(genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/")){
+function(keyword,genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/")){
 ## filter the pubmed
    pubmed <- pubmed[!is.na(pubmed[,1])&(pubmed[,2]!=""),]
+   Phenotype.trim = paste(pubmed[,"Phenotype"]," [PMID:",pubmed[,"PMID"],"]",sep= "")
+   pubmed <- cbind(pubmed,Phenotype.trim)
    pubmed_genes <- unlist(lapply(as.character(pubmed[,"Approved.Symbol"]),function(x) unlist(strsplit(x,", "))))
    pdb_genes <- as.character(genepdb[!is.na(genepdb[,"chr"]),"Gene.symbol"])
 
@@ -48,7 +50,7 @@ function(genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/")){
     check.gene <- function(gene,x){
         x.split <- unlist(strsplit(as.character(x),", "))
         check.i <- intersect(gene,x.split)
-        check.result <- ifelse(length(check.i)>0,T,F)
+        check.result <- ifelse(length(check.i)>0,TRUE,FALSE)
         return(check.result)
     }
     
@@ -56,13 +58,39 @@ function(genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/")){
     colnames(geneAll)[ncol(geneAll)] <- "pubmed"
     for(i in 1:nrow(geneAll)){
        gene.i <- geneAll[i,1]  
-       pheno.i <- as.character(unique(pubmed[unlist(lapply(pubmed[,"Approved.Symbol"],function(x) check.gene(gene.i,x))), "Phenotype"]))
+       pheno.i <- as.character(unique(pubmed[unlist(lapply(pubmed[,"Approved.Symbol"],function(x) check.gene(gene.i,x))), "Phenotype.trim"]))
        if(length(pheno.i) > 0){
            geneAll[i,"pubmed"] <- paste(pheno.i,collapse=";")
            }else{
               geneAll[i,"pubmed"] <- ""
        }       
-    }    
+    }  
+    
+    geneAll = geneAll[!is.na(geneAll[,2]),]  
+    
+    ##  score for the relations
+    score_relations <- function(x){
+         # x <- geneAll[1,]
+         score <- 0
+         if(length(grep_split(keyword,x[9])) >0 )
+            score <- score + 0.1
+         if(length(grep_split(keyword,x[10])) >0 )
+            score <- score + 0.2
+         if(length(grep_split(keyword,x[11])) >0 )
+            score <- score + 0.2
+         if(length(grep_split(keyword,x[12])) >0 )
+            score <- score + 0.2
+         if(length(grep_split(keyword,x[13])) >0 )
+            score <- score + 0.2
+        ## check the evidences from literatures, the more evidence, the higher score.
+         n_pubmed <- length(grep_split(keyword,unlist(strsplit(x[14],";")))) 
+         score_pub <- ifelse(n_pubmed*0.03 < 0.1, n_pubmed*0.03,0.1)
+            score <- score + score_pub
+        
+        return(score)
+    }
+    Score <- unlist(apply(geneAll,1,score_relations))
+    geneAll <- cbind(geneAll, Score)
+    geneAll <- geneAll[order(as.numeric(geneAll[,"Score"]),decreasing = TRUE),]
     return(geneAll)
 }
-

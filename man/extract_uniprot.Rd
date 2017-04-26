@@ -50,7 +50,7 @@ A list containing two components:
 Nucleic Acids Res. 43: D204-D212 (2015).
 }
 \author{
-Zongfu Cao (caozongfu@gmail.com)
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 
 

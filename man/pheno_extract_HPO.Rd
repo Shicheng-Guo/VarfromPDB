@@ -47,7 +47,7 @@ biology and disease through phenotype data Nucl. Acids Res.
 (1 January 2014) 42 (D1): D966-D974 doi:10.1093/nar/gkt1026
 }
 \author{
-Zongfu Cao (caozongfu@gmail.com)
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 
 \seealso{

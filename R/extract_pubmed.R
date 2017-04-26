@@ -89,12 +89,17 @@ gs2hgnc <- function(gene){
 ## mapping a variant to a gene based on sentence-level concurrence
 ## esblish a statistic for distance to measure the relationship of a pair of variant-gene
 var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
+    # text <- pubmed_abs[i]
+  #  text <- stri_replace_all_regex(x, "?",  "") 
     text <- stri_replace_all_regex(text, " &gt; ",  "&gt;") 
     text <- stri_replace_all_regex(text, "&gt; ",  "&gt;") 
     text <- stri_replace_all_regex(text, "-&gt;",  "&gt;") 
-    x.trim <- unlist(strsplit(text,"\\:|\\,|\\[|\\]|and"))
-    x.trim.2 <- unlist(strsplit(text,"\\:|\\. |\\[|\\]|and"))
-    x.trim.3 <- unlist(strsplit(text,"\\:|\\. |\\[|\\]"))
+#    x.trim <- unlist(strsplit(text,"\\:|\\,|\\[|\\]|and"))
+#    x.trim.2 <- unlist(strsplit(text,"\\:|\\. |\\[|\\]|and"))
+#    x.trim.3 <- unlist(strsplit(text,"\\:|\\. |\\[|\\]"))
+    x.trim <- unlist(strsplit(text,"\\:|\\,|and"))
+    x.trim.2 <- unlist(strsplit(text,"\\:|\\. |and"))
+    x.trim.3 <- unlist(strsplit(text,"\\:|\\. "))
     relations <- c()    
 
     ## search "()",whether have the format such as "GJB2 (35delG, 176del16, 235delC, 299delAT)"
@@ -125,10 +130,19 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
     if(length(extr.genes) > 0 & length(extr.vars.c)==0 & length(extr.vars.p) > 0){
        if(length(extr.genes) == 1 & length(extr.vars.p) == 1){
           relations <- rbind(relations,c(extr.genes,"",extr.vars.p,"one2one"))
+          }else if(length(extr.genes) > 1 & length(extr.vars.p) == 1){
+             relaltions.slect = c()
+             for(i in extr.genes){
+                k <- extr.vars.p
+                sentence.m <- x.trim.3[intersect(grep(i,x.trim.3,fixed = TRUE),grep(k,x.trim.3,fixed = TRUE))] 
+                relaltions.slect <- rbind(relaltions.slect,c(i,k,length(sentence.m),paste(sentence.m,collapse = ";")))
+             }   
+             relaltions.hit <- relaltions.slect[relaltions.slect[,3] == max(relaltions.slect[,3]),]
+             relations <- rbind(relations,relaltions.hit)         
           }else{
           for(i in extr.genes){
              for(k in extr.vars.p){
-                sentence.m <- x.trim.3[intersect(grep(i,x.trim.3,fixed=T),grep(k,x.trim.3,fixed=T))] 
+                sentence.m <- x.trim.3[intersect(grep(i,x.trim.3,fixed = TRUE),grep(k,x.trim.3,fixed = TRUE))] 
                 if(length(sentence.m) >=1)
                    relations <- rbind(relations,c(i,"",k,paste(c("toConfirm", sentence.m),collapse = ":")))
              }
@@ -140,16 +154,16 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
     if(length(extr.genes) >1){
     for(i in extr.genes){
       if(length(extr.vars.c) == 1 & length(extr.vars.p) == 1){
-          sentence.m <- x.trim.3[c(intersect(grep(i,x.trim.3,fixed=T),grep(extr.vars.c,x.trim.3,fixed=T)),
-            intersect(grep(i,x.trim.3,fixed=T),grep(extr.vars.p,x.trim.3,fixed=T)))] 
+          sentence.m <- x.trim.3[c(intersect(grep(i,x.trim.3,fixed = TRUE),grep(extr.vars.c,x.trim.3,fixed = TRUE)),
+            intersect(grep(i,x.trim.3,fixed = TRUE),grep(extr.vars.p,x.trim.3,fixed = TRUE)))] 
           if(length(sentence.m) >=1)
           relations <- rbind(relations,c(i,extr.vars.c,extr.vars.p,"one2one"))
       }else
       if(length(extr.vars.c) > 0){
         for(j in extr.vars.c){
-           s.i <- intersect(grep(i,x.trim,fixed=T),grep(j,x.trim,fixed=T))
+           s.i <- intersect(grep(i,x.trim,fixed = TRUE),grep(j,x.trim,fixed = TRUE))
            if(length(s.i) ==0 | (length(extr.vars.c) == 1 & length(extr.vars.p) == 1)){
-                  s.i.2 <- intersect(grep(i,x.trim.2,fixed=T),grep(j,x.trim.2,fixed=T))
+                  s.i.2 <- intersect(grep(i,x.trim.2,fixed = TRUE),grep(j,x.trim.2,fixed = TRUE))
                   if(length(s.i.2)==0) next
            }       
     ## 1. c.DNA,p.change,gene in a sentence. comma seperated
@@ -159,9 +173,9 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
            # check the protein-level mutation whether in the sentence
                  if(length(extr.vars.p) > 0){
                       for(k in extr.vars.p){
-                        if(length(grep(k,sentence.m,fixed=T)) > 0){
+                        if(length(grep(k,sentence.m,fixed = TRUE)) > 0){
                             relations <- rbind(relations,c(i,j,k,","))
-                            }else  if(length(grep(j,relations,fixed=T)) == 0){
+                            }else  if(length(grep(j,relations,fixed = TRUE)) == 0){
                                 relations <- rbind(relations,c(i,j,"",","))
                         }    
                       }      
@@ -179,7 +193,7 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
            # check the protein-level mutation whether in the sentence
                  if(length(extr.vars.p) > 0){
                       for(k in extr.vars.p){
-                        if(length(grep(k,sentence.m,fixed=T)) > 0){
+                        if(length(grep(k,sentence.m,fixed = TRUE)) > 0){
                             if(length(extr.vars.c) == 1 & length(extr.vars.p) == 1){
                                relations <- rbind(relations,c(i,j,k,"one2one"))
                                }else{
@@ -214,10 +228,11 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
                for(j in extr.vars.c){
                  if(length(extr.vars.p)>0){
                   for(k in extr.vars.p){
-                    s.j <- intersect(grep(j,x.trim,fixed=T),grep(k,x.trim,fixed=T))
+                    s.j <- intersect(grep(j,x.trim,fixed = TRUE),grep(k,x.trim,fixed = TRUE))
                     if(length(s.j) ==0 ){
-                           s.j.2 <- intersect(grep(j,x.trim.2,fixed=T),grep(k,x.trim.2,fixed=T))
-                           if(length(s.j.2)==0) next
+                           s.j.2 <- intersect(grep(j,x.trim.2,fixed = TRUE),grep(k,x.trim.2,fixed = TRUE))
+                           if(length(s.j.2)==0) # next
+                           relations <- rbind(relations,c(i,j,"",""))
                     }       
              ## 1. c.DNA,p.change,gene in a sentence. comma seperated 
                     if(length(s.j) >=1) { 
@@ -227,11 +242,10 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
                       }else if(length(s.j) == 0 & length(s.j.2) == 0){
                               relations <- rbind(relations,c(i,j,"","")) 
                     }     
-                    rm(s.j); rm(s.j.2)            
+                    rm(s.j);           
                   }
                  } 
-               }   
-               
+               }     
              }
      }
 
@@ -258,6 +272,16 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
               ifelse(length(extr.vars.c) == 0, "", paste(extr.vars.c,collapse= ",")), 
               ifelse(length(extr.vars.p) == 0, "", paste(extr.vars.p,collapse= ",")), paste(c("toConfirm", text),collapse = ":"))
        }else if(is.matrix(relations)){
+      ## check the pt change
+       pt.check = table(relations[relations[,3] != "",3])      
+       pt.check = pt.check[pt.check>1]
+       if(length(pt.check) > 0){
+           checks = is.element(relations[,3],names(pt.check)) & relations[,4] == "."
+           nums.rm = (1:nrow(relations))[checks]
+           relations = relations[-nums.rm,]
+       }
+      
+      if(is.matrix(relations)){     
       if(nrow(relations) > length(extr.vars.c)){
           relations.1 <- relations[relations[,4] == ","|relations[,4] == "one2one"|relations[,4] == "one2more",]
           if(is.matrix(relations.1)){
@@ -273,13 +297,14 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
               relations <- relations.1
               }else{
                 relations.2 <- relations.2[!is.element(relations.2[,2],mut.c.rep),]
-                if(nrow(relations.2)>0){
-                   relations <- rbind(relations.1,relations.2)
-                   }else{
+                if (is.matrix(relations.2)|length((relations.2)) == 4){
+                      relations <- rbind(relations.1,relations.2)
+                    }else{
                       relations <- relations.1
                 } 
             }         
           } 
+          
       ## check relations from "," "." 
         if(!is.null( nrow(relations))){
           if(nrow(relations) > length(extr.vars.c)){     
@@ -307,7 +332,7 @@ var2gene <- function(text,extr.genes,extr.vars.c,extr.vars.p){
                                           paste(c("toConfirm", text),collapse = ":"))
              }
         }  
-       }   
+       }}   
    }           
     return(relations)
 }
@@ -452,7 +477,7 @@ ptChange2hgvs <- function(x){
     ## capture the genes and mutations from an abstract
     gene_var_abs <- function(x){
         # x = abs_trim(pubmed_abs[20])
-        # x = (pubmed_abs[297])
+        # x = (pubmed_abs[309])
         x <- stri_replace_all_regex(x, " &gt; ",  "&gt;") 
         x <- stri_replace_all_regex(x, "&gt; ",  "&gt;") 
         x <- stri_replace_all_regex(x, "-&gt;",  "&gt;") 
@@ -517,7 +542,8 @@ ptChange2hgvs <- function(x){
                 aa.check = aa.check[order(aa.check)]
                 if(!aa.check[1])
                    muts.pt = setdiff(muts.pt,i)
-             }}
+             }
+            }
    
          ## check whether the mutation is AA+nmeric+*, premature termanition
             muts.pt.3 <- unique(x.trim[grep("^[A-Z]*.*[0-9]+\\*$|^[dD]elta[A-Z][0-9]+",x.trim)])
@@ -533,10 +559,10 @@ ptChange2hgvs <- function(x){
                 muts.pt <- setdiff(muts.pt, muts.pt[grep("^D[0-9]+S[0-9]+",muts.pt)])
                 muts.pt <- setdiff(muts.pt, muts.pt[grep("^D[XY]S[0-9]+",muts.pt)])
             }
-     ##    }
+     
          ## last, search AA full name mutation
          if(length(muts.pt) == 0 ){
-            muts.no <- unlist(lapply(aa_full,function(x.aa) agrep(x.aa,x.trim,value=F)))
+            muts.no <- unlist(lapply(aa_full,function(x.aa) agrep(x.aa,x.trim,value = FALSE)))
             muts.no <- muts.no[order(muts.no)]
             if(length(muts.no) > 0 ){
                muts.pt.4 <- x.trim[muts.no]
@@ -595,7 +621,8 @@ ptChange2hgvs <- function(x){
           dir.create(download.path )
        options(timeout = 300)
        if( !file.exists(paste(download.path,"hgnc_complete_set.txt.gz",sep="/")))
-           download.file(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"),method="auto")
+          # download.file(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"),method="auto")
+            curl_download(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"))
        hgnc <- paste(download.path,"hgnc_complete_set.txt.gz",sep="/")
     }
     if(substr(hgnc,nchar(hgnc)-1,nchar(hgnc)) == "gz"){
@@ -604,13 +631,10 @@ ptChange2hgvs <- function(x){
             hgnc <- read.delim(hgnc)
     }       
 
-  ##  hgnc <- read.delim(gzfile("/public/home/czf/project/rare.disease/localPDB/hgnc_complete_set.txt.gz"))
     Approved.Symbol <- as.character(hgnc$Approved.Symbol)
     gene.Synonyms <- unlist(lapply(as.character(hgnc$Synonyms),function(x) str_trim(unlist(strsplit(x,",")))))
     gene.Previous.Symbols <- unlist(lapply(as.character(hgnc$Previous.Symbols),function(x) str_trim(unlist(strsplit(x,",")))))
     gene.Alias <- c(gene.Synonyms,gene.Previous.Symbols)
-#    aa <- NULL
-#    data(aa,package="VarfromPDB")
     aa.table <- aa
     aa_full = unique(as.character(aa.table[,2]))
     aa_ab = as.character(unique(as.matrix(aa.table[,3:4])))
@@ -633,7 +657,7 @@ ptChange2hgvs <- function(x){
     phenotype_pubmed[is.na(phenotype_pubmed)] <- unlist(lapply(pubmed_conclusion[is.na(phenotype_pubmed)], function(x) pheno_capture_abs(keyword,x)))
     pheno.info <- cbind(phenotype_pubmed,pubmed_title,journal,years,first_author,country,pubmed_PMID)
     pubmed_captures <- lapply(pubmed_abs,gene_var_abs)
-   # for(i in 1:578) {print(c(i,pubmed_captures[[i]]));gene_var_abs(pubmed_abs[i])}   ## test the code
+   # for(i in 500:1500) {print(i);gene_var_abs(pubmed_abs[i])}   ## debug the code
     length.pairs <- unlist(lapply(pubmed_captures,function(x) ifelse(is.null(nrow(x)),1,nrow(x))))
     pubmed_merge <- c()
     for(i in 1:length(length.pairs)){
@@ -663,6 +687,4 @@ ptChange2hgvs <- function(x){
     print(c(length(phenotype_pubmed),length(pubmed_title),length(years),length(first_author),length(country),length(pubmed_PMID),nrow(pubmed_merge)))
     return(list(pubmed_merge,cbind(pubmed_PMID,pubmed_title,pubmed_abs)))    
 }
-
-#write.table(pubmed_merge,"/public/home/czf/project/phd/pkg/test/pubmed_merge.txt",sep="\t",quote=F,row.names=F)
 

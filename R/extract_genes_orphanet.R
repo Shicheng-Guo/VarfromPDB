@@ -23,7 +23,7 @@ function(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), HPO.disease = NU
            dir.create(download.path )
        options(timeout = 300)
        if(!file.exists(paste(download.path,"en_product6.xml",sep="/")))
-            download.file(orphanet,paste(download.path,"en_product6.xml",sep="/"),method="auto")
+            curl_download(orphanet,paste(download.path,"en_product6.xml",sep="/"))
        orphanet <- paste(download.path,"en_product6.xml",sep="/")
     }
 
@@ -33,6 +33,7 @@ function(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), HPO.disease = NU
     
     pheno2gene <- c()
     for(i in 1:length(lists)){     
+ #   for(i in 300:309){     
        OrphaNumber.i <- lists[i][[1]]$OrphaNumber
        Phenotype.i <- lists[i][[1]]$Name$text
        if(is.element(paste("ORPHANET",OrphaNumber.i,sep=":"),HPO.disease) | length(grep_split(keyword,Phenotype.i))>0){
@@ -46,6 +47,7 @@ function(keyword, localPDB = paste(getwd(),"localPDB",sep="/"), HPO.disease = NU
           }
        }   
     }
-    colnames(pheno2gene) <- c("OrphaNumber","Phenotype","GeneSymbol","GeneName","GeneType","AssociationType","AssociationStatus")  
+    if(!is.null(pheno2gene))
+        colnames(pheno2gene) <- c("OrphaNumber","Phenotype","GeneSymbol","GeneName","GeneType","AssociationType","AssociationStatus")  
     return(pheno2gene)
 }

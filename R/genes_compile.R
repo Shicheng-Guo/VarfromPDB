@@ -1,5 +1,5 @@
 genes_compile <-
-function(HPO,orphanet,omim,clinvar,uniprot,localPDB.path = paste(getwd(),"localPDB",sep="/")){
+function(HPO,orphanet,omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),"localPDB",sep="/")){
 
 # trim the gene names: 'ORF' -> 'orf'
     gene.orf <- function(x){
@@ -12,7 +12,11 @@ function(HPO,orphanet,omim,clinvar,uniprot,localPDB.path = paste(getwd(),"localP
     
     hgnc <- read.delim(gzfile(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")))
     refFlat <- read.delim(gzfile(paste(localPDB.path,"refFlat.txt.gz",sep="/")),header= FALSE)    
-    genes <- unique(c(as.character(HPO[,3]), as.character(orphanet[,3]), as.character(omim[,6]), as.character(clinvar[,2]), as.character(uniprot[,1])))
+    if( !is.null(omim)) {    
+       genes <- unique(c(as.character(HPO[,3]), as.character(orphanet[,3]), as.character(omim[,6]), as.character(clinvar[,2]), as.character(uniprot[,1])))
+       }else{
+           genes <- unique(c(as.character(HPO[,3]), as.character(orphanet[,3]), as.character(clinvar[,2]), as.character(uniprot[,1])))      
+    }   
     genes <- genes[genes != "" & genes != "missing"]
     genes.trim <- unique(unlist(lapply(genes,gene.orf)))
     refFlat.extract <- refFlat[is.element(refFlat[,1],genes.trim),]
@@ -31,7 +35,8 @@ function(HPO,orphanet,omim,clinvar,uniprot,localPDB.path = paste(getwd(),"localP
     
     HPO[,3] <- unlist(lapply(as.character(HPO[,3]),gene.orf))
     orphanet[,3] <- unlist(lapply(as.character(orphanet[,3]),gene.orf))
-    omim[,6] <- unlist(lapply(as.character(omim[,6]),gene.orf))
+    if( !is.null(omim))
+       omim[,6] <- unlist(lapply(as.character(omim[,6]),gene.orf))    
     clinvar[,2] <- unlist(lapply(as.character(clinvar[,2]),gene.orf))
     uniprot[,1] <- unlist(lapply(as.character(uniprot[,1]),gene.orf))
     gene2pheno <- matrix(,nrow=length(genes.trim),ncol=8)
@@ -42,14 +47,14 @@ function(HPO,orphanet,omim,clinvar,uniprot,localPDB.path = paste(getwd(),"localP
     gene2pheno[,c("Synonyms")] <- as.character(hgnc.extract[genes.trim,c("Synonyms")])
     gene2pheno[,c("Approved.Name")] <- as.character(hgnc.extract[genes.trim,c("Approved.Name")])
     gene2pheno[,"Entrez.Gene.ID"] <- as.character(hgnc.extract[genes.trim,c("Entrez.Gene.ID")])       
-      for(i in genes.trim){
+    for(i in genes.trim){
        # i = genes[1]
        gene2pheno[i,"HPO"] <- paste(unique(HPO[HPO[,3] == i,4]),collapse=";")
        gene2pheno[i,"Orphanet"] <- paste(orphanet[orphanet[,3] == i,2],collapse=";")
        if(!is.null(omim))
            gene2pheno[i,"OMIM"] <- paste(omim[omim[,6] == i,1],collapse=";")
-           gene2pheno[i,"ClinVar"] <- paste(clinvar[clinvar[,2] == i,4],collapse=";")
-           gene2pheno[i,"Uniprot"] <- paste(uniprot[uniprot[,1] == i,2],collapse=";")
+       gene2pheno[i,"ClinVar"] <- paste(clinvar[clinvar[,2] == i,"DiseaseName"],collapse=";")
+       gene2pheno[i,"Uniprot"] <- paste(uniprot[uniprot[,1] == i,2],collapse=";")
     }
     gene2pheno <- cbind(gene.position,gene2pheno)
     

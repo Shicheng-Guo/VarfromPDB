@@ -23,7 +23,7 @@ function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/")){
           dir.create(download.path )
        options(timeout = 300)
        if( !file.exists(paste(download.path,"phenotype_annotation.tab",sep="/")))
-           download.file(HPO,paste(download.path,"phenotype_annotation.tab",sep="/"),method="auto")
+           curl_download(HPO,paste(download.path,"phenotype_annotation.tab",sep="/"))
        HPO <- paste(download.path,"phenotype_annotation.tab",sep="/")
     }
      HPO <- read.delim(HPO,header= FALSE)
@@ -36,7 +36,7 @@ function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/")){
           dir.create(download.path )
        options(timeout = 300)
        if( !file.exists(paste(download.path,"diseases_to_genes.txt",sep="/")))
-           download.file(diseases_to_genes,paste(download.path,"diseases_to_genes.txt",sep="/"),method="curl")
+           curl_download(diseases_to_genes,paste(download.path,"diseases_to_genes.txt",sep="/"))
        diseases_to_genes <- paste(download.path,"diseases_to_genes.txt",sep="/")
     }
      diseases_to_genes <- read.delim(diseases_to_genes,fill= TRUE , flush= TRUE,header=FALSE,col.names=c("diseaseId","geneID","GeneSymbol"),comment.char = "#")

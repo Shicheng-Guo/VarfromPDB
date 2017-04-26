@@ -24,7 +24,7 @@ Extention for grep functin.
 The function return the numbers vector which contain the keyword.
 }
 \author{
-Zongfu Cao
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 \seealso{
 \code{\link{grep}}

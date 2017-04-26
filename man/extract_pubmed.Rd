@@ -8,7 +8,8 @@ Extract the genes and variants related to a genetic disorder from PubMed
 disorder or a clinical feature from NCBI PubMed.
 }
 \usage{
-extract_pubmed(query, keyword, localPDB.path = paste(getwd(), "localPDB", sep = "/"))
+extract_pubmed(query, keyword, localPDB.path = paste(getwd(), "localPDB",
+              sep = "/"))
 }
 \arguments{
   \item{query}{
@@ -31,17 +32,19 @@ We recommend to check the searching strategy and the results carefully.
 }
 \value{
 A list containing two components:
- \item{pubmed_captures }{the relationships among phenotypes, genes, and mutations captured from PubMed}
+ \item{pubmed_captures }{the relationships among phenotypes, genes, and 
+       mutations captured from PubMed}
  \item{abstracts }{ all the abstracts captured from PubMed. }
 }
 \author{
-Zongfu Cao (caozongfu@gmail.com)
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 
 \examples{
-## capture the genes and mutations related to cataract in Chinese populations from PubMed
+## capture the genes and mutations related to cataract in Chinese populations 
+## from PubMed
 #cataract_pubmed <- extract_pubmed(
-#               query = "cataract AND gene AND mutation AND chinese NOT meta analysis",
+#    query = "cataract AND gene AND mutation AND chinese NOT meta analysis",
 #               keyword="cataract",
 #               localPDB="/public/home/czf/project/rare.disease/localPDB")
  }

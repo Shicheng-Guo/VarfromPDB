@@ -10,7 +10,7 @@ HPO, MedGen, GeneReview, HGNC, Orphanet, ClinVar and Uniprot.
 }
 \usage{
 localPDB(localPDB.path = paste(getwd(), "localPDB", sep = "/"), PDB = "all", 
-         omim.url = NULL)
+         omim.url = NULL, download.method = "curl_fetch_disk")
 }
 \arguments{
   \item{localPDB.path}{
@@ -22,6 +22,10 @@ which database to localize. The value must be one of "all"(default), "HPO",
 }
   \item{omim.url}{
 the FTP URL of OMIM. 
+}
+  \item{download.method}{
+the method for downloading files, including "curl_fetch_disk", "curl_download",
+"download.file".  
 }
 }
 
@@ -67,6 +71,6 @@ PubMed Central PMCID: PMC4383985.
 9.OMIM:http://www.omim.org/
 }
 \author{
-Zongfu Cao
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
-\keyword{Public database }
+\keyword{Public databases }

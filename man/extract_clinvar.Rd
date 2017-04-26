@@ -12,8 +12,8 @@ Furtherly, the variants on a use-defined gene list can be captured
 at the same time.
 }
 \usage{
-extract_clinvar(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), type = "both",
-           HPO.disease = NULL, genelist = NULL)
+extract_clinvar(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), 
+           type = "both", HPO.disease = NULL, genelist = NULL, OMIM = NULL)
 }
 \arguments{
   \item{keyword}{
@@ -33,6 +33,10 @@ MIM number of the disease in HPO are added.
 }
   \item{genelist}{
 the gene(s) associated to the disease, or the genes you are interested.
+}
+  \item{OMIM}{
+whether use the information from OMIM database. The default value is NULL.
+It can be set 'yes' when you make sue you have a OMIM API key.
 }
 }
 \details{
@@ -67,13 +71,9 @@ ClinVar. http://www.ncbi.nlm.nih.gov/books/NBK174587/
 Helen V. Firth, et al. The Human Phenotype Ontology project: linking molecular 
 biology and disease through phenotype data Nucl. Acids Res. 
 (1 January 2014) 42 (D1): D966-D974 doi:10.1093/nar/gkt1026
-
-4.GeneReviews: http://www.ncbi.nlm.nih.gov/books/NBK1116/
-
-5.MedGen: http://www.ncbi.nlm.nih.gov/medgen
 }
 \author{
-Zongfu Cao (caozongfu@gmail.com)
+Zongfu Cao (caozongfu@nrifp.org.cn)
 }
 \seealso{
 \code{\link{pheno_extract_HPO}},
