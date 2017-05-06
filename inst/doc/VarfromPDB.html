@@ -12,7 +12,7 @@
 
 <meta name="author" content="Zongfu Cao, Lei Wang" />
 
-<meta name="date" content="2017-04-26" />
+<meta name="date" content="2017-05-06" />
 
 <title>Introduction to VarfromPDB</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to VarfromPDB</h1>
 <h4 class="author"><em>Zongfu Cao, Lei Wang</em></h4>
-<h4 class="date"><em>2017-04-26</em></h4>
+<h4 class="date"><em>2017-05-06</em></h4>
 
 
 
@@ -129,6 +129,7 @@ out.path =<span class="st"> </span><span class="kw">paste</span>(work.path,prefi
 <h2>3.2 Creating a local database</h2>
 <p>We strongly recommend that you download the files from HPO, HGNC, ClinVar, OMIM, Ophanet and UniProt before you start a job for the first time, which maybe more efficient. All the databases can be free accessed except the OMIM, so you should apply for the FTP URL and API key from OMIM before your first job. Suppose you already have the OMIM FTP URL and API key, omim.url and omim.api. However, the OMIM database is optional for the process. Suppose you have no available OMIM FTP URL and API key, so the OMIM database will be ignored.You can just type</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">localPDB</span>()</code></pre></div>
+<p>In general, it needs several minutes to localize the database files. However, the run time of localPDB step mainly depends on internet speed. If the network is not very satisfying, the step will interrupt. Then you should have a check of the internet and try again.</p>
 </div>
 <div id="capture-the-genes-and-variants-related-to-joubert-syndrome" class="section level2">
 <h2>3.3 Capture the genes and variants related to Joubert syndrome</h2>

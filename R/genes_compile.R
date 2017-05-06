@@ -10,7 +10,7 @@ function(HPO,orphanet,omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),
         return(x)    
     }
     
-    hgnc <- read.delim(gzfile(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")))
+    hgnc <- read.delim(paste(localPDB.path,"hgnc_complete_set.txt",sep="/"))
     refFlat <- read.delim(gzfile(paste(localPDB.path,"refFlat.txt.gz",sep="/")),header= FALSE)    
     if( !is.null(omim)) {    
        genes <- unique(c(as.character(HPO[,3]), as.character(orphanet[,3]), as.character(omim[,6]), as.character(clinvar[,2]), as.character(uniprot[,1])))
@@ -42,11 +42,11 @@ function(HPO,orphanet,omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),
     gene2pheno <- matrix(,nrow=length(genes.trim),ncol=8)
     colnames(gene2pheno) <- c("Entrez.Gene.ID","Approved.Name","Synonyms","HPO","Orphanet","OMIM","ClinVar","Uniprot")
     rownames(gene2pheno) <- genes.trim
-    hgnc.extract <- hgnc[is.element(hgnc$Approved.Symbol,genes.trim),]
-    rownames(hgnc.extract) <- hgnc.extract$Approved.Symbol
-    gene2pheno[,c("Synonyms")] <- as.character(hgnc.extract[genes.trim,c("Synonyms")])
-    gene2pheno[,c("Approved.Name")] <- as.character(hgnc.extract[genes.trim,c("Approved.Name")])
-    gene2pheno[,"Entrez.Gene.ID"] <- as.character(hgnc.extract[genes.trim,c("Entrez.Gene.ID")])       
+    hgnc.extract <- hgnc[is.element(hgnc$symbol,genes.trim),]
+    rownames(hgnc.extract) <- hgnc.extract$symbol
+    gene2pheno[,c("Synonyms")] <- as.character(hgnc.extract[genes.trim,c("alias_symbol")])
+    gene2pheno[,c("Approved.Name")] <- as.character(hgnc.extract[genes.trim,c("name")])
+    gene2pheno[,"Entrez.Gene.ID"] <- as.character(hgnc.extract[genes.trim,c("entrez_id")])       
     for(i in genes.trim){
        # i = genes[1]
        gene2pheno[i,"HPO"] <- paste(unique(HPO[HPO[,3] == i,4]),collapse=";")
@@ -60,7 +60,7 @@ function(HPO,orphanet,omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),
     
     #add the omim missing genes
     if(!is.null(omim)){
-       omim.missing <- omim[omim$Approved.Symbol == "missing",]
+       omim.missing <- omim[omim$symbol == "missing",]
        if(nrow(omim.missing) > 0){
          gene2pheno <- rbind(gene2pheno,matrix(,nrow=nrow(omim.missing),ncol=8+5))
          gene2pheno[(nrow(gene2pheno)-nrow(omim.missing)+1):nrow(gene2pheno),"Synonyms"] <- as.character(omim.missing[,"gene"])

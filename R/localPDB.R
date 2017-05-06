@@ -9,8 +9,19 @@ function(localPDB.path = paste(getwd(),"localPDB",sep="/"),PDB="all", omim.url =
     options(timeout = 200)
     if(PDB == "all"){
       HPO <- "yes"; Orphanet <- "yes"; HGNC <- "yes"; ClinVar <- "yes"; Uniprot <- "yes"
-    }
-
+      }else if(toupper(PDB) == "HPO"){
+          HPO <- "yes"; Orphanet <- "no"; HGNC <- "no"; ClinVar <- "no"; Uniprot <- "no"
+      }else if(toupper(PDB) == "ORPHANET"){
+          HPO <- "no"; Orphanet <- "yes"; HGNC <- "no"; ClinVar <- "no"; Uniprot <- "no"
+      }else if(toupper(PDB) == "HGNC"){
+          HPO <- "no"; Orphanet <- "no"; HGNC <- "yes"; ClinVar <- "no"; Uniprot <- "no"
+      }else if(toupper(PDB) == "CLINVAR"){
+          HPO <- "no"; Orphanet <- "no"; HGNC <- "no"; ClinVar <- "yes"; Uniprot <- "no"
+      }else if(toupper(PDB) == "UNIPROT"){
+          HPO <- "no"; Orphanet <- "no"; HGNC <- "no"; ClinVar <- "no"; Uniprot <- "yes"
+      }      
+      
+      
 ## function: file to disk
 file2disk <- function(url,destfile){
        if( !file.exists(destfile)|(file.exists(destfile) & file.size(destfile) == 0)){
@@ -36,7 +47,7 @@ file2disk <- function(url,destfile){
        
 ## download the file 'morbidmap.txt' from OMIM database    
    if(is.null(omim.url)){ 
-      print("Warning: please make sure you have localized the OMIM file morbidmap!if NOT, you should apply for an OMIM account and get the URL from http://omim.org/downloads.However, you can go on the process without the OMIM account, the final compiled genes maybe imcomplete!")
+   #   print("Warning: please make sure you have localized the OMIM file morbidmap!if NOT, you should apply for an OMIM account and get the URL from http://omim.org/downloads.However, you can go on the process without the OMIM account, the final compiled genes maybe imcomplete!")
       }else if(!is.null(omim.url)){
         morbidmap <- omim.url
         morbidmap.local <- paste(download.path,"morbidmap.txt",sep="/")
@@ -54,8 +65,8 @@ file2disk <- function(url,destfile){
        diseases_to_genes <- "http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/lastStableBuild/artifact/annotation/diseases_to_genes.txt"
        HPO.local <- paste(download.path,"phenotype_annotation.tab",sep="/")
        diseases_to_genes.local <- paste(download.path,"diseases_to_genes.txt",sep="/")
-        file2disk(HPO,HPO.local)
-        file2disk(diseases_to_genes,diseases_to_genes.local)
+   #     file2disk(HPO,HPO.local)
+   #     file2disk(diseases_to_genes,diseases_to_genes.local)
         for(i in 1:5){
            file2disk(HPO,HPO.local)
            if(file.exists(HPO.local) & file.size(HPO.local) > 0) break
@@ -85,8 +96,9 @@ file2disk <- function(url,destfile){
       
 ## download the necessary files from HGNC database    
    if(HGNC == "yes" | toupper(PDB) == "HGNC"){
-       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc_complete_set.txt.gz"
-       hgnc.local <- paste(download.path,"hgnc_complete_set.txt.gz",sep="/")
+#       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc_complete_set.txt.gz"
+       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt"
+       hgnc.local <- paste(download.path,"hgnc_complete_set.txt",sep="/")
         for(i in 1:5){
            file2disk(hgnc,hgnc.local)
            if(file.exists(hgnc.local) & file.size(hgnc.local) > 0) break
@@ -119,7 +131,7 @@ file2disk <- function(url,destfile){
    if(Uniprot == "yes" | toupper(PDB) == "UNIPROT"){
        uniprot <- "http://www.uniprot.org/docs/humsavar.txt"
        uniprot.local <- paste(download.path,"humsavar.txt",sep="/")
-       file2disk(uniprot,uniprot.local)
+   #    file2disk(uniprot,uniprot.local)
         for(i in 1:5){
            file2disk(uniprot,uniprot.local)
            if(file.exists(uniprot.local) & file.size(uniprot.local) > 0) break

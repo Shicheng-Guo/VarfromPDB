@@ -15,7 +15,7 @@ function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/")){
             HPO <- NULL; diseases_to_genes <- NULL  
     }     
          
-    #check hgnc database
+    #check HPO database
     if(is.null(HPO)){
        HPO <- "http://compbio.charite.de/hudson/job/hpo.annotations/lastStableBuild/artifact/misc/phenotype_annotation.tab"
        download.path <- paste(getwd(),"localPDB",sep="/")

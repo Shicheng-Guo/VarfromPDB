@@ -67,6 +67,7 @@ We strongly recommend that you download the files from HPO, HGNC, ClinVar, OMIM,
 ```{r eval=FALSE}
 localPDB()
 ```
+In general, it needs several minutes to localize the database files. However, the run time of localPDB step mainly depends on internet speed. If the network is not very satisfying, the step will interrupt. Then you should have a check of the internet and try again. 
 
 
 ## 3.3 Capture the genes and variants related to Joubert syndrome

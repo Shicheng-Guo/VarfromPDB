@@ -49,25 +49,25 @@ gs2hgnc <- function(gene){
    #gene = "A1BGAS"
    gene = toupper(gene)
    gene.approved = gene
-   app = hgnc[hgnc$Approved.Symbol==gene,]
-   pre.symbol = hgnc[grep(gene,hgnc$Previous.Symbols),]
-   synonyms = hgnc[grep(gene,hgnc$Synonyms),]
+   app = hgnc[hgnc$symbol==gene,]
+   pre.symbol = hgnc[grep(gene,hgnc$prev_symbol),]
+   synonyms = hgnc[grep(gene,hgnc$alias_symbol),]
    if(nrow(app)==1){
-      gene.approved = as.character(app$Approved.Symbol)
+      gene.approved = as.character(app$symbol)
       }else if(nrow(pre.symbol)==1){
-         pre.symbol.trim = as.character(pre.symbol$Previous.Symbols)
+         pre.symbol.trim = as.character(pre.symbol$prev_symbol)
          pre.symbol.trim = unlist(strsplit(pre.symbol.trim,", "))
          if(length(pre.symbol.trim[pre.symbol.trim==gene]) == 1){
-            gene.approved = as.character(pre.symbol$Approved.Symbol)
+            gene.approved = as.character(pre.symbol$symbol)
             }
           }else if(nrow(pre.symbol) > 1){
-            pre.symbol.trim = as.character(pre.symbol$Previous.Symbols)
+            pre.symbol.trim = as.character(pre.symbol$prev_symbol)
             for(j in 1:length(pre.symbol.trim)){
                   pre.symbol.trim.j = unlist(strsplit(pre.symbol.trim[j],", "))
                   if(length(intersect(pre.symbol.trim.j,gene)) > 0){
                   if(intersect(pre.symbol.trim.j,gene) == gene){
                     pre.symbol.j = pre.symbol[j,]
-                    gene.approved = as.character(pre.symbol.j$Approved.Symbol)
+                    gene.approved = as.character(pre.symbol.j$symbol)
                   }}
                }
             }else if(nrow(synonyms) >= 1){
@@ -77,7 +77,7 @@ gs2hgnc <- function(gene){
                   if(length(intersect(synonyms.trim.j,gene)) > 0){
                   if(intersect(synonyms.trim.j,gene) == gene){
                    synonyms.j = synonyms[j,]
-                    gene.approved = as.character(synonyms.j$Approved.Symbol)
+                    gene.approved = as.character(synonyms.j$symbol)
                   }}
                }               
             }
@@ -605,8 +605,8 @@ ptChange2hgvs <- function(x){
 
 ## input HGNC dataset
     if(file.exists(localPDB.path)){
-         if(file.exists(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/"))){
-             hgnc <- paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")
+         if(file.exists(paste(localPDB.path,"hgnc_complete_set.txt",sep="/"))){
+             hgnc <- paste(localPDB.path,"hgnc_complete_set.txt",sep="/")
              }else{
                  hgnc <- NULL
          }        
@@ -615,15 +615,15 @@ ptChange2hgvs <- function(x){
     }     
 
     if(is.null(hgnc)){
-       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc_complete_set.txt.gz"
+       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt"
        download.path <- paste(getwd(),"localPDB",sep="/")
        if(!file.exists(download.path))
           dir.create(download.path )
        options(timeout = 300)
-       if( !file.exists(paste(download.path,"hgnc_complete_set.txt.gz",sep="/")))
+       if( !file.exists(paste(download.path,"hgnc_complete_set.txt",sep="/")))
           # download.file(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"),method="auto")
-            curl_download(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"))
-       hgnc <- paste(download.path,"hgnc_complete_set.txt.gz",sep="/")
+            curl_download(hgnc,paste(download.path,"hgnc_complete_set.txt",sep="/"))
+       hgnc <- paste(download.path,"hgnc_complete_set.txt",sep="/")
     }
     if(substr(hgnc,nchar(hgnc)-1,nchar(hgnc)) == "gz"){
         hgnc <- read.delim(gzfile(hgnc))
@@ -631,9 +631,9 @@ ptChange2hgvs <- function(x){
             hgnc <- read.delim(hgnc)
     }       
 
-    Approved.Symbol <- as.character(hgnc$Approved.Symbol)
-    gene.Synonyms <- unlist(lapply(as.character(hgnc$Synonyms),function(x) str_trim(unlist(strsplit(x,",")))))
-    gene.Previous.Symbols <- unlist(lapply(as.character(hgnc$Previous.Symbols),function(x) str_trim(unlist(strsplit(x,",")))))
+    Approved.Symbol <- as.character(hgnc$symbol)
+    gene.Synonyms <- unlist(lapply(as.character(hgnc$alias_symbol),function(x) str_trim(unlist(strsplit(x,"|")))))
+    gene.Previous.Symbols <- unlist(lapply(as.character(hgnc$prev_symbol),function(x) str_trim(unlist(strsplit(x,"|")))))
     gene.Alias <- c(gene.Synonyms,gene.Previous.Symbols)
     aa.table <- aa
     aa_full = unique(as.character(aa.table[,2]))

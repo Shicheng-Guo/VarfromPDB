@@ -16,14 +16,17 @@ function(keyword,genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/"
         return(x)    
     }
     
-    hgnc <- read.delim(gzfile(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")))
+    hgnc <- read.delim(paste(localPDB.path,"hgnc_complete_set.txt",sep="/"))
     refFlat <- read.delim(gzfile(paste(localPDB.path,"refFlat.txt.gz",sep="/")),header= FALSE)    
     genes <- unique(c(as.character(pdb_genes), as.character(pubmed_genes)))
     genes <- genes[genes != ""]
-    genes <- genes[-grep("missing",genes)]
+    rm.nos <- -grep("missing",genes)
+    if(length(rm.nos) > 0)  genes <- genes[-rm.nos]
     genes.trim <- unique(unlist(lapply(genes,gene.orf)))
     genes_add <- setdiff(genes.trim,pdb_genes)
     refFlat.extract <- refFlat[is.element(refFlat[,1],genes.trim),]
+
+  if(length(genes_add) > 0 ){  
     gene.position <- matrix(,nrow=length(genes_add),ncol=8)
     colnames(gene.position) <- c("Gene.symbol","chr","strand","start","end","Entrez.Gene.ID","Approved.Name","Synonyms")
     rownames(gene.position) <- gene.position[,1] <- genes_add
@@ -36,16 +39,19 @@ function(keyword,genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/"
            gene.position[g,"end"] <- max(refFlat.extract.g[,6])                 
        }
     }
-    hgnc.extract <- hgnc[is.element(hgnc$Approved.Symbol,genes_add),]
-    rownames(hgnc.extract) <- hgnc.extract$Approved.Symbol
-    gene.position[rownames(hgnc.extract),c("Synonyms")] <- as.character(hgnc.extract[rownames(hgnc.extract),c("Synonyms")])
-    gene.position[rownames(hgnc.extract),c("Approved.Name")] <- as.character(hgnc.extract[rownames(hgnc.extract),c("Approved.Name")])
-    gene.position[rownames(hgnc.extract),c("Entrez.Gene.ID")] <- as.character(hgnc.extract[rownames(hgnc.extract),c("Entrez.Gene.ID")])
+    hgnc.extract <- hgnc[is.element(hgnc$symbol,genes_add),]
+    rownames(hgnc.extract) <- hgnc.extract$symbol
+    gene.position[rownames(hgnc.extract),c("Synonyms")] <- as.character(hgnc.extract[rownames(hgnc.extract),c("alias_symbol")])
+    gene.position[rownames(hgnc.extract),c("Approved.Name")] <- as.character(hgnc.extract[rownames(hgnc.extract),c("name")])
+    gene.position[rownames(hgnc.extract),c("Entrez.Gene.ID")] <- as.character(hgnc.extract[rownames(hgnc.extract),c("entrez_id")])
    
     geneAll <- matrix(,nrow=nrow(genepdb)+nrow(gene.position),ncol=ncol(genepdb))
     colnames(geneAll) <- colnames(genepdb)
     geneAll[1:nrow(genepdb),] <- as.matrix(genepdb[,])
     geneAll[(1+nrow(genepdb)):nrow(geneAll),1:ncol(gene.position)] <- as.matrix(gene.position) 
+    }else {
+       geneAll <- genepdb
+  }   
     
     check.gene <- function(gene,x){
         x.split <- unlist(strsplit(as.character(x),", "))
@@ -55,14 +61,14 @@ function(keyword,genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/"
     }
     
     geneAll <- cbind(geneAll,"")
-    colnames(geneAll)[ncol(geneAll)] <- "pubmed"
+    colnames(geneAll)[ncol(geneAll)] <- "PubMed"
     for(i in 1:nrow(geneAll)){
        gene.i <- geneAll[i,1]  
        pheno.i <- as.character(unique(pubmed[unlist(lapply(pubmed[,"Approved.Symbol"],function(x) check.gene(gene.i,x))), "Phenotype.trim"]))
        if(length(pheno.i) > 0){
-           geneAll[i,"pubmed"] <- paste(pheno.i,collapse=";")
+           geneAll[i,"PubMed"] <- paste(pheno.i,collapse=";")
            }else{
-              geneAll[i,"pubmed"] <- ""
+              geneAll[i,"PubMed"] <- ""
        }       
     }  
     
