@@ -10,7 +10,7 @@ function(HPO,orphanet,omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),
         return(x)    
     }
     
-    hgnc <- read.delim(paste(localPDB.path,"hgnc_complete_set.txt",sep="/"))
+    hgnc <- read.delim(gzfile(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")))
     refFlat <- read.delim(gzfile(paste(localPDB.path,"refFlat.txt.gz",sep="/")),header= FALSE)    
     if( !is.null(omim)) {    
        genes <- unique(c(as.character(HPO[,3]), as.character(orphanet[,3]), as.character(omim[,6]), as.character(clinvar[,2]), as.character(uniprot[,1])))
@@ -42,11 +42,11 @@ function(HPO,orphanet,omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),
     gene2pheno <- matrix(,nrow=length(genes.trim),ncol=8)
     colnames(gene2pheno) <- c("Entrez.Gene.ID","Approved.Name","Synonyms","HPO","Orphanet","OMIM","ClinVar","Uniprot")
     rownames(gene2pheno) <- genes.trim
-    hgnc.extract <- hgnc[is.element(hgnc$symbol,genes.trim),]
-    rownames(hgnc.extract) <- hgnc.extract$symbol
-    gene2pheno[,c("Synonyms")] <- as.character(hgnc.extract[genes.trim,c("alias_symbol")])
-    gene2pheno[,c("Approved.Name")] <- as.character(hgnc.extract[genes.trim,c("name")])
-    gene2pheno[,"Entrez.Gene.ID"] <- as.character(hgnc.extract[genes.trim,c("entrez_id")])       
+    hgnc.extract <- hgnc[is.element(hgnc$Approved.Symbol,genes.trim),]
+    rownames(hgnc.extract) <- hgnc.extract$Approved.Symbol
+    gene2pheno[,c("Synonyms")] <- as.character(hgnc.extract[genes.trim,"Synonyms"])
+    gene2pheno[,c("Approved.Name")] <- as.character(hgnc.extract[genes.trim,"Approved.Name"])
+    gene2pheno[,"Entrez.Gene.ID"] <- as.character(hgnc.extract[genes.trim,c("Entrez.Gene.ID")])       
     for(i in genes.trim){
        # i = genes[1]
        gene2pheno[i,"HPO"] <- paste(unique(HPO[HPO[,3] == i,4]),collapse=";")

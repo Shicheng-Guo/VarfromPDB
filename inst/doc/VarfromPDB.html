@@ -10,9 +10,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="Zongfu Cao, Lei Wang" />
+<meta name="author" content="Zongfu Cao, Lei Wang, Yufei Yu" />
 
-<meta name="date" content="2017-05-06" />
+<meta name="date" content="2018-09-07" />
 
 <title>Introduction to VarfromPDB</title>
 
@@ -69,8 +69,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Introduction to VarfromPDB</h1>
-<h4 class="author"><em>Zongfu Cao, Lei Wang</em></h4>
-<h4 class="date"><em>2017-05-06</em></h4>
+<h4 class="author"><em>Zongfu Cao, Lei Wang, Yufei Yu</em></h4>
+<h4 class="date"><em>2018-09-07</em></h4>
 
 
 
@@ -138,7 +138,7 @@ out.path =<span class="st"> </span><span class="kw">paste</span>(work.path,prefi
 <p>The function pheno_extract_HPO obtains the alias of a genetic disease from HPO database for the given keyword(s), which can be a disease name or a clinical feature. When the keywords contain multiple words, the order of the multiple words will be ignored. The aliases of a genetic disease can be used in the capturing process from other databases to make sure that this information is complete.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">HPO.phenotype =<span class="st"> </span><span class="kw">pheno_extract_HPO</span>(keywords)
 phenoID.hpo.omim =<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unique</span>(HPO.phenotype[<span class="kw">grep</span>(<span class="st">&quot;OMIM&quot;</span>,HPO.phenotype[,<span class="dv">1</span>]),<span class="dv">1</span>]))
-phenoID.hpo.orphanet =<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unique</span>(HPO.phenotype[<span class="kw">grep</span>(<span class="st">&quot;ORPHANET&quot;</span>,HPO.phenotype[,<span class="dv">1</span>]),<span class="dv">1</span>]))
+phenoID.hpo.orphanet =<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unique</span>(HPO.phenotype[<span class="kw">grep</span>(<span class="st">&quot;ORPHA&quot;</span>,HPO.phenotype[,<span class="dv">1</span>]),<span class="dv">1</span>]))
 genes.hpo =<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unique</span>(HPO.phenotype[,<span class="dv">3</span>]))
 genes.hpo =<span class="st"> </span>genes.hpo[genes.hpo<span class="op">!=</span><span class="st">&quot;&quot;</span>]
 <span class="kw">write.table</span>(HPO.phenotype,<span class="kw">paste</span>(out.path,<span class="st">&quot;/&quot;</span>,<span class="st">&quot;HPO_&quot;</span>,prefix,<span class="st">&quot;.txt&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>),<span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>,<span class="dt">row.names=</span>F,<span class="dt">quote=</span>F)</code></pre></div>

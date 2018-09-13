@@ -605,8 +605,8 @@ ptChange2hgvs <- function(x){
 
 ## input HGNC dataset
     if(file.exists(localPDB.path)){
-         if(file.exists(paste(localPDB.path,"hgnc_complete_set.txt",sep="/"))){
-             hgnc <- paste(localPDB.path,"hgnc_complete_set.txt",sep="/")
+         if(file.exists(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/"))){
+             hgnc <- paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")
              }else{
                  hgnc <- NULL
          }        
@@ -615,15 +615,15 @@ ptChange2hgvs <- function(x){
     }     
 
     if(is.null(hgnc)){
-       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt"
+       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc_complete_set.txt.gz"
        download.path <- paste(getwd(),"localPDB",sep="/")
        if(!file.exists(download.path))
           dir.create(download.path )
        options(timeout = 300)
-       if( !file.exists(paste(download.path,"hgnc_complete_set.txt",sep="/")))
+       if( !file.exists(paste(download.path,"hgnc_complete_set.txt.gz",sep="/")))
           # download.file(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"),method="auto")
-            curl_download(hgnc,paste(download.path,"hgnc_complete_set.txt",sep="/"))
-       hgnc <- paste(download.path,"hgnc_complete_set.txt",sep="/")
+            curl_download(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"))
+       hgnc <- paste(download.path,"hgnc_complete_set.txt.gz",sep="/")
     }
     if(substr(hgnc,nchar(hgnc)-1,nchar(hgnc)) == "gz"){
         hgnc <- read.delim(gzfile(hgnc))

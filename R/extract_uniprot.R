@@ -64,9 +64,13 @@ function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/"), HPO.disease
        }
 
       dat.extr <- unique(dat.d)   
-      dat.extr$pheno.check <- "no"
-      dat.extr[is.element(dat.extr$DiseaseName,pheno.yes),"pheno.check"] <-  "yes"      
-      genes.extr <- unique(dat.extr[,c("GeneSymbol","DiseaseName","pheno.check")])
-      genes.extr <- genes.extr[genes.extr$DiseaseName != "-",]      
+      if(nrow(dat.extr) > 0){
+        dat.extr$pheno.check <- "no"
+        dat.extr[is.element(dat.extr$DiseaseName,pheno.yes),"pheno.check"] <-  "yes"      
+        genes.extr <- unique(dat.extr[,c("GeneSymbol","DiseaseName","pheno.check")])
+        genes.extr <- genes.extr[genes.extr$DiseaseName != "-",]      
+        }else{
+           genes.extr = dat.extr = NULL
+      }
       return(list(genes.extr,dat.extr))
 }

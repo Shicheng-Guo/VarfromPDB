@@ -96,9 +96,9 @@ file2disk <- function(url,destfile){
       
 ## download the necessary files from HGNC database    
    if(HGNC == "yes" | toupper(PDB) == "HGNC"){
-#       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc_complete_set.txt.gz"
-       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt"
-       hgnc.local <- paste(download.path,"hgnc_complete_set.txt",sep="/")
+       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc_complete_set.txt.gz"
+#       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt"
+       hgnc.local <- paste(download.path,"hgnc_complete_set.txt.gz",sep="/")
         for(i in 1:5){
            file2disk(hgnc,hgnc.local)
            if(file.exists(hgnc.local) & file.size(hgnc.local) > 0) break

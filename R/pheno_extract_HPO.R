@@ -51,14 +51,16 @@ function(keyword, localPDB.path = paste(getwd(),"localPDB",sep="/")){
       db.id <- paste(HPO.j.sim[,1],HPO.j.sim[,2],sep=":")
       diseases_to_genes.j <- diseases_to_genes[is.element(diseases_to_genes[,1],db.id),]
       colnames(diseases_to_genes.j) <- c("DiseaseID","GeneID","GeneName")
-      diseases_to_genes.j$Synonym <- diseases_to_genes.j$DiseaseName <-  ""
-      for(i in unique(diseases_to_genes.j[,1])){
-          diseases_to_genes.j[diseases_to_genes.j[,1] == i,"DiseaseName"] <- as.character(unique(HPO.j.sim[db.id==i,3]))
-          diseases_to_genes.j[diseases_to_genes.j[,1] == i,"Synonym"] <- as.character(unique(HPO.j.sim[db.id==i,5]))         
-      }
-       
-      return(diseases_to_genes.j)  
+      if( nrow(diseases_to_genes.j) >0 ){
+         diseases_to_genes.j$Synonym <- diseases_to_genes.j$DiseaseName <-  ""
+         for(i in unique(diseases_to_genes.j[,1])){
+             diseases_to_genes.j[diseases_to_genes.j[,1] == i,"DiseaseName"] <- as.character(unique(HPO.j.sim[db.id==i,3]))
+             diseases_to_genes.j[diseases_to_genes.j[,1] == i,"Synonym"] <- as.character(unique(HPO.j.sim[db.id==i,5]))         
+         }
+      }    
       }else{
-      return(list(HPO,diseases_to_genes))
+#      return(list(HPO,diseases_to_genes))
+       diseases_to_genes.j = NULL
     } 
+      return(diseases_to_genes.j)  
 }

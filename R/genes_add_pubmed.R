@@ -16,11 +16,11 @@ function(keyword,genepdb,pubmed,localPDB.path = paste(getwd(),"localPDB",sep="/"
         return(x)    
     }
     
-    hgnc <- read.delim(paste(localPDB.path,"hgnc_complete_set.txt",sep="/"))
+    hgnc <- read.delim(gzfile(paste(localPDB.path,"hgnc_complete_set.txt.gz",sep="/")))
     refFlat <- read.delim(gzfile(paste(localPDB.path,"refFlat.txt.gz",sep="/")),header= FALSE)    
     genes <- unique(c(as.character(pdb_genes), as.character(pubmed_genes)))
     genes <- genes[genes != ""]
-    rm.nos <- -grep("missing",genes)
+    rm.nos <- grep("missing",genes)
     if(length(rm.nos) > 0)  genes <- genes[-rm.nos]
     genes.trim <- unique(unlist(lapply(genes,gene.orf)))
     genes_add <- setdiff(genes.trim,pdb_genes)

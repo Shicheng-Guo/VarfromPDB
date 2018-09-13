@@ -95,19 +95,24 @@ function(keyword, localPDB.path=paste(getwd(), "localPDB",sep="/"), type="both",
        }
 
       gene2dis.extr <- unique(gene2dis.d)   
-      gene2dis.extr$pheno.check <- "no"
-      gene2dis.extr[is.element(gene2dis.extr$DiseaseName,pheno.yes),"pheno.check"] <-  "yes"
-           
-      genes <- unique(as.character(gene2dis.extr[,2]))    
-     
-##extract the variants in the genes
-     clinvar.extr <- clinvar[is.element(clinvar[,"GeneSymbol"],genes),]
-     
-## extract the variants from summary file directly
-      clinvar.d <- clinvar[grep_split(keyword,clinvar[,"PhenotypeList"]),]
-     
-## merge the variants from ClinVar and other databases
-     clinvar.extr <- unique(rbind(clinvar.extr,clinvar.d))
+      if(nrow(gene2dis.extr) > 0){
+         gene2dis.extr$pheno.check <- "no"
+         gene2dis.extr[is.element(gene2dis.extr$DiseaseName,pheno.yes),"pheno.check"] <-  "yes"
+              
+         genes <- unique(as.character(gene2dis.extr[,2]))    
+        
+   ##extract the variants in the genes
+        clinvar.extr <- clinvar[is.element(clinvar[,"GeneSymbol"],genes),]
+        
+   ## extract the variants from summary file directly
+         clinvar.d <- clinvar[grep_split(keyword,clinvar[,"PhenotypeList"]),]
+        
+   ## merge the variants from ClinVar and other databases
+        clinvar.extr <- unique(rbind(clinvar.extr,clinvar.d))
+        }else{
+           clinvar.extr = NULL
+      }
+   
      extract <- list(gene2dis.extr,clinvar.extr)
      names(extract) <- c("gene2dis","variants")
      return(extract)

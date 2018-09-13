@@ -65,13 +65,22 @@ function(omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),"localPDB",se
     if(is.data.frame(uniprot.add)) {
          nrow.uniprot.add <- nrow(uniprot.add)
          }else{
-            nrow.uniprot.add <- 1
-    }     
+            if(is.null(uniprot.add)){
+               nrow.uniprot.add <- 0
+               }else{
+                 nrow.uniprot.add <- 1
+            }
+         }         
+     
     
     if( !is.null(omim)){
         var.add <- matrix(,nrow= sum(nrow.omim.add, nrow(clinvar.add), nrow.uniprot.add),ncol=ncol(var2pheno))
         }else{
-            var.add <- matrix(,nrow= sum(nrow(clinvar.add), nrow.uniprot.add),ncol=ncol(var2pheno))        
+            if(sum(nrow(clinvar.add), nrow.uniprot.add) == 0){
+                   var.add = NULL
+               }else{
+                 var.add <- matrix(,nrow= sum(nrow(clinvar.add), nrow.uniprot.add),ncol=ncol(var2pheno))        
+            }
     }
         
     colnames(var.add) <- colnames(var2pheno)
@@ -108,5 +117,6 @@ function(omim = NULL,clinvar,uniprot,localPDB.path = paste(getwd(),"localPDB",se
                  }    
     }
     var2pheno <- rbind(var2pheno,var.add)
+    if(as.character(var2pheno)[1]=="") var2pheno == NULL
     return(var2pheno)
 }

@@ -18,7 +18,7 @@
 ## ----eval=FALSE----------------------------------------------------------
 #  HPO.phenotype = pheno_extract_HPO(keywords)
 #  phenoID.hpo.omim = as.character(unique(HPO.phenotype[grep("OMIM",HPO.phenotype[,1]),1]))
-#  phenoID.hpo.orphanet = as.character(unique(HPO.phenotype[grep("ORPHANET",HPO.phenotype[,1]),1]))
+#  phenoID.hpo.orphanet = as.character(unique(HPO.phenotype[grep("ORPHA",HPO.phenotype[,1]),1]))
 #  genes.hpo = as.character(unique(HPO.phenotype[,3]))
 #  genes.hpo = genes.hpo[genes.hpo!=""]
 #  write.table(HPO.phenotype,paste(out.path,"/","HPO_",prefix,".txt",sep=""),sep="\t",row.names=F,quote=F)

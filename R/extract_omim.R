@@ -17,15 +17,16 @@ function(keyword, omim.apiKey,
        colnames(morbidmap) <- c("disease","gene","gene.mim.no","location")
     #check hgnc database
     if(is.null(hgnc)){
-       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt"
+       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/hgnc_complete_set.txt.gz"
+#       hgnc <- "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt"
        download.path <- paste(getwd(),"localPDB",sep="/")
        if(!file.exists(download.path))
           dir.create(download.path )
        options(timeout = 300)
-       if( !file.exists(paste(download.path,"hgnc_complete_set.txt",sep="/")))
+       if( !file.exists(paste(download.path,"hgnc_complete_set.txt.gz",sep="/")))
           # download.file(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"),method="auto")
-           curl_download(hgnc,paste(download.path,"hgnc_complete_set.txt",sep="/"))
-       hgnc <- paste(download.path,"hgnc_complete_set.txt",sep="/")
+           curl_download(hgnc,paste(download.path,"hgnc_complete_set.txt.gz",sep="/"))
+       hgnc <- paste(download.path,"hgnc_complete_set.txt.gz",sep="/")
     }
     if(substr(hgnc,nchar(hgnc)-1,nchar(hgnc)) == "gz"){
         hgnc <- read.delim(gzfile(hgnc))
